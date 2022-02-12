@@ -31,9 +31,11 @@
 
 #### Measurements Table
 - UserId
+- DeviceId
 - MeasurementId
 - Measurement
 - CreatedAt
+- UpdatedAt
 
 #### Devices Type Table
 - DeviceTypeId
@@ -41,7 +43,7 @@
 
 #### Devices
 - Id
-- DeviceId
+- DeviceTypeId
 - Model
 - PurchasedOn
 - MACAddress
@@ -50,6 +52,6 @@
 #### DeviceAssignment Table
 - Id 
 - UserId
-- AssignedAt
 - AssignedBy
-- UpdatedAt (will be when the device was removed for that patient)
+- AssignedAt
+- UpdatedAt (will be used when the device was removed for that patient)
