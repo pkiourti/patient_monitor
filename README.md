@@ -36,7 +36,7 @@
 - CreatedAt
 
 #### Devices Type Table
-- DeviceId
+- DeviceTypeId
 - DeviceType
 
 #### Devices
