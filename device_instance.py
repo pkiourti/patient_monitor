@@ -79,7 +79,7 @@ class DeviceInstance(Device):
         with open(device_measurements_db_file, 'r') as f:
             measurements = json.load(f)
         ids = measurements.keys()
-        ids = [id for id in ids] if ids else [-1]
+        ids = [int(id) for id in ids] if ids else [-1]
         measurement_id = max(ids) + 1
         measurements[str(measurement_id)] = {
             "user_id": str(),
@@ -127,3 +127,68 @@ class DeviceInstance(Device):
                         + self.device_type \
                         + ' data sent are outside of possible range '\
                         + '[82 Fahrenheit, 105 Fahrenheit]')
+        if self.device_type == 'oximeter':
+            data = int(data)
+            if data > 100 or data < 0:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[0, 100], percentage of oxygen in the blood')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[0, 100], percentage of oxygen in the blood')
+        if self.device_type == 'pulse':
+            data = int(data)
+            if data > 480 or data < 27:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[27bpm, 480bpm]')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[27bpm, 480bpm]')
+        if self.device_type == 'glucometer':
+            data = int(data)
+            if data > 147.6 or data < 10:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[10mg/dL, 147mg/dL]')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[10mg/dL, 147mg/dL]')
+        if self.device_type == 'blood_pressure':
+            systolic = int(data['systolic'])
+            diastolic = int(data['diastolic'])
+            if systolic > 200 or systolic < 80:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[80mmHg, 200mmHg]')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[80mmHg, 200mmHg]')
+            if diastolic > 150 or diastolic < 30:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[30mmHg, 150mmHg]')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[30mmHg, 150mmHg]')
+        if self.device_type == 'weight':
+            data = int(data)
+            if data > 1400 or data < 2:
+                self.logger.error(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[2lbs, 1400lbs]')
+                raise ValueError(str(self.assignment_id) + ': ' 
+                        + self.device_type \
+                        + ' data sent are outside of possible range '\
+                        + '[2lbs, 1400lbs]')
