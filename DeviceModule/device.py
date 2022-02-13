@@ -17,6 +17,7 @@ class Device:
         self.mac_address = mac_address
         self.purchased_on = purchased_on
         self.logger = logging.getLogger('Device Logger')
+        self.logger.setLevel(logging.DEBUG)
         self.device_id = self.create_device_id()
         
     def create_device_id(self):

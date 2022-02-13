@@ -15,6 +15,7 @@ class DeviceInstance(Device):
 
     def __init__(self, device_id, assigner, assignee):
         self.logger = logging.getLogger('Device Assignment Logger')
+        self.logger.setLevel(logging.DEBUG)
         self.device_id = device_id
         self.owner = assignee
         self.assigner = assigner
@@ -121,44 +122,44 @@ class DeviceInstance(Device):
             data = float(data)
             if data > 105 or data < 82:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Temperature ' \
                         + ' data sent are outside of possible range '\
                         + '[82 Fahrenheit, 105 Fahrenheit]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Temperature ' \
                         + ' data sent are outside of possible range '\
                         + '[82 Fahrenheit, 105 Fahrenheit]')
         if self.device_type == 'oximeter':
             data = int(data)
             if data > 100 or data < 0:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Oxygen level in the blood ' \
                         + ' data sent are outside of possible range '\
-                        + '[0, 100], percentage of oxygen in the blood')
+                        + '[0, 100] (percentage of oxygen in the blood)')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Oxygen level in the blood ' \
                         + ' data sent are outside of possible range '\
-                        + '[0, 100], percentage of oxygen in the blood')
+                        + '[0, 100] (percentage of oxygen in the blood)')
         if self.device_type == 'pulse':
             data = int(data)
             if data > 480 or data < 27:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Pulse ' \
                         + ' data sent are outside of possible range '\
                         + '[27bpm, 480bpm]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Pulse ' \
                         + ' data sent are outside of possible range '\
                         + '[27bpm, 480bpm]')
         if self.device_type == 'glucometer':
             data = int(data)
             if data > 147.6 or data < 10:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Blood glucose level ' \
                         + ' data sent are outside of possible range '\
                         + '[10mg/dL, 147mg/dL]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Blood glucose level ' \
                         + ' data sent are outside of possible range '\
                         + '[10mg/dL, 147mg/dL]')
         if self.device_type == 'blood_pressure':
@@ -166,30 +167,30 @@ class DeviceInstance(Device):
             diastolic = int(data['diastolic'])
             if systolic > 200 or systolic < 80:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Systolic blood pressure' \
                         + ' data sent are outside of possible range '\
                         + '[80mmHg, 200mmHg]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Systolic blood pressure' \
                         + ' data sent are outside of possible range '\
                         + '[80mmHg, 200mmHg]')
             if diastolic > 150 or diastolic < 30:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Diastolic blood pressure'\
                         + ' data sent are outside of possible range '\
                         + '[30mmHg, 150mmHg]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Diastolic blood pressure'\
                         + ' data sent are outside of possible range '\
                         + '[30mmHg, 150mmHg]')
         if self.device_type == 'weight':
             data = int(data)
             if data > 1400 or data < 2:
                 self.logger.error(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Weight ' \
                         + ' data sent are outside of possible range '\
                         + '[2lbs, 1400lbs]')
                 raise ValueError(str(self.assignment_id) + ': ' 
-                        + self.device_type \
+                        + 'Weight ' \
                         + ' data sent are outside of possible range '\
                         + '[2lbs, 1400lbs]')
