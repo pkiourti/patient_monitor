@@ -1,8 +1,6 @@
 from device_assignment import DeviceAssignment
-import pytest
 import string
 import random
-import time
 import os
 import json
 

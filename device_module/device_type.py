@@ -20,8 +20,10 @@ class DeviceType:
         dev_types = device_types.values()
         dev_types = [dtype.lower() for dtype in dev_types]
         if self.device_type.lower() in device_types.values():
-            self.logger.error('Device type ' + self.device_type + ' already exists')
-            raise ValueError('Device type ' + self.device_type + ' already exists')
+            self.logger.error('Device type ' + self.device_type + \
+                              ' already exists')
+            raise ValueError('Device type ' + self.device_type + \
+                              ' already exists')
 
     def create_device_type_id(self):
         with open(device_types_db_file, 'r') as f:
@@ -34,11 +36,14 @@ class DeviceType:
     def create_device_type(self, device_type):
         self.check_device_type(device_type)
         new_device_type_id = self.create_device_type_id()
+        with open(device_types_db_file, 'r') as f:
+            device_types = json.load(f)
         device_types[str(new_device_type_id)] = device_type
         with open(device_types_db_file, 'w') as f:
             data = json.dumps(device_types)
             f.write(data)
-        self.logger.info('Created device type with device type id ' + str(new_device_type_id))
+        self.logger.info('Created device type with device type id ' + \
+                         str(new_device_type_id))
         return new_device_type_id
 
     def get_device_type(self, device_type_id):

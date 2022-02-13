@@ -1,3 +1,4 @@
+# use code to prettyprint a json from https://tinyurl.com/3mmbzvdd
 from device_type import DeviceType
 from device import Device
 from device_assignment import DeviceAssignment
@@ -57,7 +58,7 @@ if __name__ == '__main__':
             dev = Device()
             try:
                 dev.create_device(device_type_id, serial_number, sw_version, mac_address, purchased_on)
-            except ValueError as e:
+            except ValueError:
                 pass
         elif choice == 6:
             device = Device()
@@ -71,7 +72,7 @@ if __name__ == '__main__':
             d = DeviceInstance()
             try:
                 dev_assignment = d.assign_device(device_id, assigner, assignee)
-            except ValueError as e:
+            except ValueError:
                 pass
         elif choice == 7:
             d = DeviceAssignment()
@@ -83,16 +84,16 @@ if __name__ == '__main__':
             try:
                 assignment = d.get_assignment(assignment_id)
                 device_id = assignment['device_id']
-            except ValueError as e:
+            except ValueError:
                 continue
             try:
                 device = Device().get_device(device_id)
                 device_type_id = device['device_type_id']
-            except ValueError as e:
+            except ValueError:
                 continue
             try:
                 device_type = DeviceType().get_device_type(device_type_id)
-            except ValueError as e:
+            except ValueError:
                 continue
             if device_type == 'temperature':
                 data = input('Write the temperature you want to record in Fahrenheit: ')
@@ -120,7 +121,7 @@ if __name__ == '__main__':
             json_data = json.dumps(json_data)
             try:
                 DeviceMeasurement().record_measurement(json_data)
-            except ValueError as e:
+            except ValueError:
                 pass
         elif choice == 8:
             exit(0)

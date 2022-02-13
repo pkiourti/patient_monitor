@@ -1,4 +1,3 @@
-from itertools import compress
 import json
 import logging
 import time
@@ -40,8 +39,10 @@ class DeviceAssignment(Device):
                             + ' to user ' + str(assignee) + ' by ' \
                             + str(assigned_by))
         if not device_id.isdecimal():
-            self.logger.error("Device id %s is not an decimal number", device_id)
-            raise ValueError("Device id %s is not an decimal number", device_id)
+            self.logger.error("Device id %s is not an decimal number",
+                              device_id)
+            raise ValueError("Device id %s is not an decimal number",
+                              device_id)
         device_id = int(device_id)
         self.check_device_id(device_id)
         assigned_at = time.time()

@@ -1,7 +1,4 @@
 from device_measurement import DeviceMeasurement
-import pytest
-import string
-import random
 import time
 import os
 import json
@@ -38,8 +35,6 @@ def test_create_device_success():
     data['measurement'] = '102'
     data['timestamp'] = time.time()
     json_data = json.dumps(data)
-    with open(device_assignments_db_file, 'r') as f:
-        assignments = json.load(f)
     measurement_id = da.record_measurement(json_data)
     assert type(measurement_id) == int
     with open(device_measurements_db_file, 'r') as f:

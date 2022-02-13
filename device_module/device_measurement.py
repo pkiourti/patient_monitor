@@ -1,8 +1,8 @@
 import logging
 import json
 import os
-import string
 import time
+from itertools import compress
 
 device_assignments_db_file = os.path.join('db', 'device_assignments.json')
 device_measurements_db_file = os.path.join('db', 'device_measurements.json')
@@ -40,8 +40,10 @@ class DeviceMeasurement:
         ids = device_types.keys()
         ids = [int(id) for id in ids] if ids else [-1]
         if device_type_id not in ids:
-            self.logger.error('Device type id '+str(device_type_id)+' does not exist')
-            raise ValueError('Device type id '+str(device_type_id)+' does not exist')
+            self.logger.error('Device type id '+str(device_type_id)+\
+                              ' does not exist')
+            raise ValueError('Device type id '+str(device_type_id)+\
+                              ' does not exist')
 
     def check_assignment_id(self, device_id, device_type_id, assignment_id):
         with open(device_assignments_db_file, 'r') as f:
@@ -49,8 +51,10 @@ class DeviceMeasurement:
         ids = assignments.keys()
         ids = [int(id) for id in ids] if ids else [-1]
         if assignment_id not in ids:
-            self.logger.error('Assignment id '+str(assignment_id)+' does not exist')
-            raise ValueError('Assignment id '+str(assignment_id)+' does not exist')
+            self.logger.error('Assignment id '+str(assignment_id)+\
+                              ' does not exist')
+            raise ValueError('Assignment id '+str(assignment_id)+\
+                              ' does not exist')
         assignment = assignments[str(assignment_id)]
         if device_id != int(assignment['device_id']):
             self.logger.error('Wrong device id sent. ' + \
@@ -84,7 +88,7 @@ class DeviceMeasurement:
                              + 'format but got data in type: ' \
                              + str(type(data)))
 
-        required_data = ['device_type_id', 'device_id', 
+        required_data = ['device_type_id', 'device_id',
                          'assignment_id', 'measurement', 'timestamp']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
@@ -100,14 +104,20 @@ class DeviceMeasurement:
         device_data_sent = json_data['measurement']
         
         if not device_type_id.isdecimal():
-            self.logger.error("Device type id %s is not an decimal number", device_type_id)
-            raise ValueError("Device type id %s is not an decimal number", device_type_id)
+            self.logger.error("Device type id %s is not an decimal number",
+                                device_type_id)
+            raise ValueError("Device type id %s is not an decimal number",
+                                device_type_id)
         if not device_id.isdecimal():
-            self.logger.error("Device id %s is not an decimal number", device_id)
-            raise ValueError("Device id %s is not an decimal number", device_id)
+            self.logger.error("Device id %s is not an decimal number",
+                                device_id)
+            raise ValueError("Device id %s is not an decimal number",
+                                device_id)
         if not assignment_id.isdecimal():
-            self.logger.error("Assignment id %s is not an decimal number", assignment_id)
-            raise ValueError("Assignment id %s is not an decimal number", assignment_id)
+            self.logger.error("Assignment id %s is not an decimal number",
+                                assignment_id)
+            raise ValueError("Assignment id %s is not an decimal number",
+                                assignment_id)
 
         device_type_id = int(device_type_id)
         device_id = int(device_id)
@@ -200,9 +210,11 @@ class DeviceMeasurement:
                 ": Systolic pressure data not sent in %s", data)
         if not data['systolic'].isdecimal():
             self.logger.error(str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number", data)
+                ": Systolic pressure data sent %s is not an decimal number",
+                data)
             raise ValueError(str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number", data)
+                ": Systolic pressure data sent %s is not an decimal number",
+                data)
         systolic = int(data['systolic'])
         if systolic > 200 or systolic < 80:
             self.logger.error(str(assignment_id) + ': ' 
@@ -222,9 +234,11 @@ class DeviceMeasurement:
                 ": Diastolic pressure data not sent in %s", data)
         if not data['diastolic'].isdecimal():
             self.logger.error(str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number", data)
+                ": Systolic pressure data sent %s is not an decimal number",
+                data)
             raise ValueError(str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number", data)
+                ": Systolic pressure data sent %s is not an decimal number",
+                data)
         diastolic = int(data['diastolic'])
         if diastolic > 150 or diastolic < 30:
             self.logger.error(str(assignment_id) + ': ' 
