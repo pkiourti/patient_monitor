@@ -66,9 +66,9 @@ if __name__ == '__main__':
             print('Available Devices:')
             print(json.dumps(devices, indent=4, sort_keys=True))
             print()
-            device_id = input('Write the device id you want to assign: ') 
-            assigner = input('Write the user id of the assigner: ') 
-            assignee = input('Write the user id of the assignee: ') 
+            device_id = input('Write the device id you want to assign: ')
+            assigner = input('Write the user id of the assigner: ')
+            assignee = input('Write the user id of the assignee: ')
             d = DeviceInstance()
             try:
                 dev_assignment = d.assign_device(device_id, assigner, assignee)
@@ -80,7 +80,7 @@ if __name__ == '__main__':
             print('Available Assignments:')
             print(json.dumps(assignments, indent=4, sort_keys=True))
             print()
-            assignment_id = input('Write the assignment id you want to use: ') 
+            assignment_id = input('Write the assignment id you want to use: ')
             try:
                 assignment = d.get_assignment(assignment_id)
                 device_id = assignment['device_id']

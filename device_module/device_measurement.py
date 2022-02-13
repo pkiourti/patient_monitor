@@ -143,7 +143,7 @@ class DeviceMeasurement:
             "device_id": str(device_id),
             "assignment_id": str(assignment_id),
             "measurement": {
-                device_type: str(device_data_sent), 
+                device_type: str(device_data_sent),
                 "timestamp": timestamp
             },
             "created_at": str(created_at)
@@ -193,11 +193,11 @@ class DeviceMeasurement:
                 ": Oxygen data sent %s is not an decimal number", data)
         data = int(data)
         if data > 100 or data < 0:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' \
                     + 'Oxygen level in the blood ' \
                     + ' data sent are outside of possible range '\
                     + '[0, 100] (percentage of oxygen in the blood)')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' \
                     + 'Oxygen level in the blood ' \
                     + ' data sent are outside of possible range '\
                     + '[0, 100] (percentage of oxygen in the blood)')
@@ -217,11 +217,11 @@ class DeviceMeasurement:
                 data)
         systolic = int(data['systolic'])
         if systolic > 200 or systolic < 80:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' + \
                     + 'Systolic blood pressure' \
                     + ' data sent are outside of possible range '\
                     + '[80mmHg, 200mmHg]')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' + \
                     + 'Systolic blood pressure' \
                     + ' data sent are outside of possible range '\
                     + '[80mmHg, 200mmHg]')
@@ -241,11 +241,11 @@ class DeviceMeasurement:
                 data)
         diastolic = int(data['diastolic'])
         if diastolic > 150 or diastolic < 30:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' + \
                     + 'Diastolic blood pressure'\
                     + ' data sent are outside of possible range '\
                     + '[30mmHg, 150mmHg]')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' + \
                     + 'Diastolic blood pressure'\
                     + ' data sent are outside of possible range '\
                     + '[30mmHg, 150mmHg]')
@@ -258,11 +258,11 @@ class DeviceMeasurement:
                 ": Pulse data sent %s is not an decimal number", data)
         data = int(data)
         if data > 480 or data < 27:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' + \
                     + 'Pulse ' \
                     + ' data sent are outside of possible range '\
                     + '[27bpm, 480bpm]')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' + \
                     + 'Pulse ' \
                     + ' data sent are outside of possible range '\
                     + '[27bpm, 480bpm]')
@@ -276,11 +276,11 @@ class DeviceMeasurement:
             raise ValueError(str(assignment_id) + \
                 ": Weight sent %s is not a number", data)
         if data > 1400 or data < 2:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' + \
                     + 'Weight ' \
                     + ' data sent are outside of possible range '\
                     + '[2lbs, 1400lbs]')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' + \
                     + 'Weight ' \
                     + ' data sent are outside of possible range '\
                     + '[2lbs, 1400lbs]')
@@ -293,11 +293,11 @@ class DeviceMeasurement:
                 ": Blood glucose level sent %s is not an decimal number", data)
         data = int(data)
         if data > 147.6 or data < 10:
-            self.logger.error(str(assignment_id) + ': ' 
+            self.logger.error(str(assignment_id) + ': ' + \
                     + 'Blood glucose level ' \
                     + ' data sent are outside of possible range '\
                     + '[10mg/dL, 147mg/dL]')
-            raise ValueError(str(assignment_id) + ': ' 
+            raise ValueError(str(assignment_id) + ': ' + \
                     + 'Blood glucose level ' \
                     + ' data sent are outside of possible range '\
                     + '[10mg/dL, 147mg/dL]')
