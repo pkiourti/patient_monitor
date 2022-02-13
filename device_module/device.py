@@ -1,4 +1,4 @@
-# Use code from https://tinyurl.com/mvj637j6 
+# Use code from https://tinyurl.com/mvj637j6
 # to check if a string is hexadecimal
 
 import time

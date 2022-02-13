@@ -69,7 +69,7 @@ if __name__ == '__main__':
             device_id = input('Write the device id you want to assign: ')
             assigner = input('Write the user id of the assigner: ')
             assignee = input('Write the user id of the assignee: ')
-            d = DeviceInstance()
+            d = DeviceAssignment()
             try:
                 dev_assignment = d.assign_device(device_id, assigner, assignee)
             except ValueError:
@@ -101,7 +101,12 @@ if __name__ == '__main__':
             if device_type == 'blood_pressure':
                 systolic_data = input('Write the systolic blood pressure you want to record in mmHg: ')
                 diastolic_data = input('Write the diastolic blood pressure you want to record in mmHg: ')
-                json_data = {"measurement": {"systolic": str(systolic_data), "diastolic": str(diastolic_data)}}
+                json_data = {
+                              "measurement": {
+                                "systolic": str(systolic_data), 
+                                "diastolic": str(diastolic_data)
+                              }
+                            }
             if device_type == 'oximeter':
                 data = input('Write the blood oxygen you want to record in percentage: ')
                 json_data = {"measurement": str(data)}

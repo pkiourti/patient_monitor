@@ -28,7 +28,7 @@ jobs:
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=F401,F403,F504,F506,F821,F823,F841,E303,E302E301,E501,W291,E9,F63,F7,F82 --show-source --statistics --max-line-length=100 
+        flake8 . --count --select=F401,F403,F504,F506,F821,F823,F841,E303,E302E301,E501,W291,E9,F63,F7,F82 --show-source --statistics --max-line-length=110 
     - name: Test with pytest
       run: |
         export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
