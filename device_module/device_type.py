@@ -22,7 +22,7 @@ class DeviceType:
             self.logger.error('Device type ' + self.device_type + ' already exists')
             raise ValueError('Device type ' + self.device_type + ' already exists')
 
-    def create_new_device_type_id(self):
+    def create_device_type_id(self):
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         ids = device_types.keys()

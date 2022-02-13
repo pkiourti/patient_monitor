@@ -1,23 +1,26 @@
-from itertools import compress
-import random
-import string
-import json
 import logging
-import time
+import json
 import os
-
-from device import Device
+import string
+import time
 
 device_assignments_db_file = os.path.join('db', 'device_assignments.json')
 device_measurements_db_file = os.path.join('db', 'device_measurements.json')
 devices_db_file = os.path.join('db', 'devices.json')
 device_types_db_file = os.path.join('db', 'device_types.json')
 
-class DeviceInstance(Device):
-
+class DeviceMeasurement:
     def __init__(self):
-        self.logger = logging.getLogger('Device Assignment Logger')
+        self.logger = logging.getLogger('Device Measurement Logger')
         self.logger.setLevel(logging.DEBUG)
+        
+    def create_measurement_id(self):
+        with open(device_measurements_db_file, 'r') as f:
+            measurements = json.load(f)
+        ids = measurements.keys()
+        ids = [int(id) for id in ids] if ids else [-1]
+        measurement_id = max(ids) + 1
+        return measurement_id
 
     def check_device_id(self, device_id):
         with open(devices_db_file, 'r') as f:
@@ -65,50 +68,8 @@ class DeviceInstance(Device):
             raise ValueError('Wrong device id sent'+\
                             'Expected device '+assignment['device_id']+\
                             ' but got '+ str(device_id))
-    
-    def create_assignment_id(self):
-        with open(device_assignments_db_file, 'r') as f:
-            assignments = json.load(f)
-        ids = assignments.keys()
-        ids = [int(id) for id in ids] if ids else [-1]
-        assignment_id = max(ids) + 1
-        return assignment_id
 
-    def assign_device(self, device_id, assigned_by, assignee):
-        self.logger.info('Assigning device id ' + str(device_id) \
-                            + ' to user ' + str(assignee) + ' by ' \
-                            + str(assigned_by))
-        assigned_at = time.time()
-        new_assignment_id = self.create_assignment_id()
-        with open(device_assignments_db_file, 'r') as f:
-            assignments = json.load(f)
-        assignments[str(new_assignment_id)] = {
-            "user_id": str(assignee),
-            "device_id": str(device_id),
-            "assigned_by": str(assigned_by),
-            "assigned_at": str(assigned_at),
-        }
-        with open(device_assignments_db_file, 'w') as f:
-            data = json.dumps(assignments)
-            f.write(data)
-        self.logger.info('User ' + str(assigned_by) \
-                         + ' successfully assigned device id ' \
-                         + str(device_id) + ' to user ' + str(assignee) \
-                         + ' by ' + str(assigned_by) + ' on ' \
-                         + str(assigned_at) + ' with assignment id ' \
-                         + str(new_assignment_id))
-        return new_assignment_id
-
-    
-    def create_measurement_id(self):
-        with open(device_measurements_db_file, 'r') as f:
-            measurements = json.load(f)
-        ids = measurements.keys()
-        ids = [int(id) for id in ids] if ids else [-1]
-        measurement_id = max(ids) + 1
-        return measurement_id
-
-    def record_data(self, data):
+    def record_measurement(self, data):
         self.logger.info('Parsing sent data')
         json_data = ''
         try:
@@ -122,7 +83,7 @@ class DeviceInstance(Device):
                              + str(type(data)))
 
         required_data = ['device_type_id', 'device_id', 
-                         'assignment_id', 'measurement']
+                         'assignment_id', 'measurement', 'timestamp']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -133,6 +94,7 @@ class DeviceInstance(Device):
         device_type_id = json_data['device_type_id']
         device_id = json_data['device_id']
         assignment_id = json_data['assignment_id']
+        timestamp = json_data['timestamp']
         device_data_sent = json_data['measurement']
         
         if not device_type_id.isdecimal():
@@ -167,7 +129,10 @@ class DeviceInstance(Device):
         measurements[str(new_measurement_id)] = {
             "device_id": str(device_id),
             "assignment_id": str(assignment_id),
-            "measurement": str(data),
+            "measurement": {
+                device_type: str(device_data_sent), 
+                "timestamp": timestamp
+            },
             "created_at": str(created_at)
         }
         with open(device_measurements_db_file, 'w') as f:
@@ -333,21 +298,6 @@ class DeviceInstance(Device):
             self.check_diastolic_pressure_data(assignment_id, data)
         if device_type == 'weight':
             self.check_weight_data(assignment_id, data)
-
-    def get_assignment(self, assignment_id):
-        with open(device_assignments_db_file, 'r') as f:
-            assignments = json.load(f)
-        if not assignment_id.isdecimal():
-            self.logger.error("Assignment id %s " + \
-                        "is not an decimal number", assignment_id)
-            raise ValueError("Assignment id %s " + \
-                        "is not an decimal number", assignment_id)
-        return assignments[str(assignment_id)]
-
-    def get_assignments(self):
-        with open(device_assignments_db_file, 'r') as f:
-            assignments = json.load(f)
-        return assignments
 
     def get_measurements(self):
         with open(device_measurements_db_file, 'r') as f:

@@ -1,10 +1,10 @@
-from device_instance import DeviceInstance
 from device_type import DeviceType
 from device import Device
-from device_type import DeviceType
-from device_instance import DeviceInstance
+from device_assignment import DeviceAssignment
+from device_measurement import DeviceMeasurement
 import json
 import os
+import time
 
 device_assignments_db_file = os.path.join('db', 'device_assignments.json')
 device_measurements_db_file = os.path.join('db', 'device_measurements.json')
@@ -39,12 +39,12 @@ if __name__ == '__main__':
             print('Available Devices:')
             print(json.dumps(devices, indent=4, sort_keys=True))
         elif choice == 3:
-            d = DeviceInstance()
+            d = DeviceAssignment()
             assignments = d.get_assignments()
             print('Available Assignments:')
             print(json.dumps(assignments, indent=4, sort_keys=True))
         elif choice == 4:
-            d = DeviceInstance()
+            d = DeviceMeasurement()
             measurements = d.get_measurements()
             print('Available Measurements:')
             print(json.dumps(measurements, indent=4, sort_keys=True))
@@ -74,7 +74,7 @@ if __name__ == '__main__':
             except ValueError as e:
                 pass
         elif choice == 7:
-            d = DeviceInstance()
+            d = DeviceAssignment()
             assignments = d.get_assignments()
             print('Available Assignments:')
             print(json.dumps(assignments, indent=4, sort_keys=True))
@@ -113,12 +113,13 @@ if __name__ == '__main__':
             if device_type == 'glucometer':
                 data = input('Write the blood glucose level you want to record in mg/dL: ')
                 json_data = {"measurement": str(data)}
+            json_data['timestamp'] = time.time()
             json_data['device_id'] = device_id
             json_data['device_type_id'] = device_type_id
             json_data['assignment_id'] = assignment_id
             json_data = json.dumps(json_data)
             try:
-                DeviceInstance().record_data(json_data)
+                DeviceMeasurement().record_measurement(json_data)
             except ValueError as e:
                 pass
         elif choice == 8:
