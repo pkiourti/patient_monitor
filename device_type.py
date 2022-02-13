@@ -1,3 +1,8 @@
+import logging
+import os
+
+device_types_db_file = os.path.join('db', 'device_types.json')
+
 class DeviceType:
     """
     Class that creates a new Device Type

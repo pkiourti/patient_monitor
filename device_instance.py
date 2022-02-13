@@ -4,11 +4,12 @@ import string
 import json
 import logging
 import time
+import os
 
-device_assignments_db_file = 'device_assignments.json'
-device_measurements_db_file = 'device_measurements.json'
-devices_db_file = 'devices.json'
-device_types_db_file = 'device_types.json'
+device_assignments_db_file = os.path.join('db', 'device_assignments.json')
+device_measurements_db_file = os.path.join('db', 'device_measurements.json')
+devices_db_file = os.path.join('db', 'devices.json')
+device_types_db_file = os.path.join('db', 'device_types.json')
 
 class DeviceInstance(Device):
 

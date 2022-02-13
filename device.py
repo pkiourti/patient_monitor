@@ -1,8 +1,9 @@
 import time
 import logging
 import json
+import os
 
-device_db_file = 'devices.json'
+device_db_file = os.path.join('db', 'devices.json')
 
 class Device:
     """
