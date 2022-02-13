@@ -3,6 +3,7 @@
 
 import time
 import logging
+import string
 import json
 import os
 
@@ -14,6 +15,7 @@ class Device:
     Class that creates a new device
     """
     def __init__(self):
+        logging.basicConfig()
         self.logger = logging.getLogger('Device Logger')
         self.logger.setLevel(logging.DEBUG)
         
@@ -34,27 +36,27 @@ class Device:
                         + str(device_type_id) + ' does not exist')
 
     def check_mac_address(self, mac_address):
-        four_hex_parts = mac_address.split(':')
-        if len(four_hex_parts) != 4:
+        six_octets = mac_address.split(':')
+        if len(six_octets) != 6:
             self.logger.error('MAC Address %s does not consist of ' + \
-                    '4 hexadecimal parts separated by \":\"', mac_address)
+                    '6 2-digit hexadecimal groups separated by \":\"', mac_address)
             raise ValueError('MAC Address does not consist of ' + \
-                    '4 hexadecimal parts separated by :', mac_address)
-        for hex_part in four_hex_parts:
-            if len(hex_part) != 4:
-                self.logger.error('MAC Address has more than four hex '+\
-                    'digits in one of each parts. Should be in the format' +\
-                    'xxxx:xxxx:xxxx:xxxx', mac_address)
-                raise ValueError('MAC Address has more than four hex '+\
-                    'digits in one of each parts. Should be in the format' +\
-                    'xxxx:xxxx:xxxx:xxxx', mac_address)
+                    '6 2-digit hexadecimal groups separated by \":\"', mac_address)
+        for hex_part in six_octets:
+            if len(hex_part) != 2:
+                self.logger.error('MAC Address does not consist of '+ \
+                    '2 digit hexadecimal groups. Should be in the format' +\
+                    'xx:xx:xx:xx:xx:xx', mac_address)
+                raise ValueError('MAC Address does not consist of '+\
+                    '2 digit hexadecimal groups. Should be in the format' +\
+                    'xx:xx:xx:xx:xx:xx', mac_address)
             try:
                 int(hex_part, 16)
             except ValueError:
                 self.logger.error('MAC Address %s does not consist of ' + \
-                    '4 hexadecimal parts', mac_address)
+                    'hexadecimal numbers', mac_address)
                 raise ValueError('MAC Address does not consist of ' + \
-                    '4 hexadecimal parts', mac_address)
+                    'hexadecimal numbers', mac_address)
 
     def check_serial_number(self, serial_number):
         digits = string.digits
@@ -93,7 +95,9 @@ class Device:
         self.check_sw_version(sw_version)
         created_at = time.time()
         new_device_id = self.create_device_id()
-        devices[str(device_id)] = {
+        with open(device_db_file, 'r') as f:
+            devices = json.load(f)
+        devices[str(new_device_id)] = {
             "device_type_id": str(device_type_id),
             "serial_number": str(serial_number),
             "sw_version": str(sw_version),
@@ -104,7 +108,8 @@ class Device:
         with open(device_db_file, 'w') as f:
             data = json.dumps(devices)
             f.write(data)
-        self.logger.info('Created device with device id', device_id)
+        self.logger.info('Created device with device id %s', str(new_device_id))
+        return new_device_id
 
     def get_device(self, device_id):
         with open(device_db_file, 'r') as f:

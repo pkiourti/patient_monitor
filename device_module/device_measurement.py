@@ -11,6 +11,7 @@ device_types_db_file = os.path.join('db', 'device_types.json')
 
 class DeviceMeasurement:
     def __init__(self):
+        logging.basicConfig()
         self.logger = logging.getLogger('Device Measurement Logger')
         self.logger.setLevel(logging.DEBUG)
         
@@ -31,27 +32,18 @@ class DeviceMeasurement:
             self.logger.error('Device id ' \
                         + str(device_id) + ' does not exist')
             raise ValueError('Device id ' \
-                        + str(self.device_id) + ' does not exist')
+                        + str(device_id) + ' does not exist')
 
-    def check_device(self, device_id, device_type_id):
-        with open(devices_db_file, 'r') as f:
-            devices = json.load(f)
-        ids = devices.keys()
+    def check_device_type(self, device_type_id):
+        with open(device_types_db_file, 'r') as f:
+            device_types = json.load(f)
+        ids = device_types.keys()
         ids = [int(id) for id in ids] if ids else [-1]
-        if device_id not in ids:
-            self.logger.error('Device id '+str(device_id)+' does not exist')
-            raise ValueError('Device id '+str(device_id)+' does not exist')
-        device = devices[str(device_id)]
-        if device_type_id != int(device['device_type_id']):
-            self.logger.error('Wrong device type id sent')
-            self.logger.error('Expected device type '+device['device_type_id'])
-            self.logger.error(' but got ' + str(device_type_id))
+        if device_type_id not in ids:
+            self.logger.error('Device type id '+str(device_type_id)+' does not exist')
+            raise ValueError('Device type id '+str(device_type_id)+' does not exist')
 
-            raise ValueError('Wrong device type id sent'+\
-                            'Expected device type '+device['device_type_id']+\
-                            ' but got '+ str(device_type_id))
-
-    def check_assignment_id(self, device_id, assignment_id):
+    def check_assignment_id(self, device_id, device_type_id, assignment_id):
         with open(device_assignments_db_file, 'r') as f:
             assignments = json.load(f)
         ids = assignments.keys()
@@ -61,13 +53,23 @@ class DeviceMeasurement:
             raise ValueError('Assignment id '+str(assignment_id)+' does not exist')
         assignment = assignments[str(assignment_id)]
         if device_id != int(assignment['device_id']):
-            self.logger.error('Wrong device id sent')
-            self.logger.error('Expected device '+assignment['device_id'])
-            self.logger.error(' but got ' + str(device_id))
-
-            raise ValueError('Wrong device id sent'+\
+            self.logger.error('Wrong device id sent. ' + \
+                              'Expected device '+assignment['device_id'] + \
+                              ' but got ' + str(device_id))
+            raise ValueError('Wrong device id sent. '+\
                             'Expected device '+assignment['device_id']+\
                             ' but got '+ str(device_id))
+        device_id = assignment['device_id']
+        with open(devices_db_file, 'r') as f:
+            devices = json.load(f)
+        device = devices[str(device_id)]
+        if device_type_id != int(device['device_type_id']):
+            self.logger.error('Wrong device type id sent. ' + \
+                    'Expected device type '+device['device_type_id'] + \
+                    ' but got ' + str(device_type_id))
+            raise ValueError('Wrong device type id sent. '+\
+                            'Expected device type '+device['device_type_id']+\
+                            ' but got '+ str(device_type_id))
 
     def record_measurement(self, data):
         self.logger.info('Parsing sent data')
@@ -112,16 +114,17 @@ class DeviceMeasurement:
         assignment_id = int(assignment_id)
         
         self.check_device_id(device_id)
-        self.check_device(device_id, device_type_id)
-        self.check_assignment_id(device_id, assignment_id)
+        self.check_device_type(device_type_id)
+        self.check_assignment_id(device_id, device_type_id, assignment_id)
         
-        self.logger.info(str(assignment_id) + \
+        self.logger.info('Assignment Id: ' + str(assignment_id) + \
             ": Checking format of measurement data sent from device %s", \
             str(device_id))
 
         device_type = self.get_device_type(device_type_id)
         self.check_data(assignment_id, device_type, device_data_sent)
-        self.logger.info('Creating a new measurement')
+        self.logger.info('Assignment Id: ' + str(assignment_id) + \
+                            ': creating a new measurement')
         created_at = time.time()
         new_measurement_id = self.create_measurement_id()
         with open(device_measurements_db_file, 'r') as f:
@@ -138,9 +141,10 @@ class DeviceMeasurement:
         with open(device_measurements_db_file, 'w') as f:
             data = json.dumps(measurements)
             f.write(data)
-        self.logger.info(str(assignment_id) + \
-            'Created a new measurement with measurement id ' + \
+        self.logger.info('Assignment Id: ' + str(assignment_id) + \
+            ': Created a new measurement with measurement id ' + \
             str(new_measurement_id))
+        return new_measurement_id
 
     def get_device_type(self, device_type_id):
         with open(device_types_db_file, 'r') as f:

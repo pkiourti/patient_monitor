@@ -10,6 +10,7 @@ class DeviceType:
     """
 
     def __init__(self):
+        logging.basicConfig()
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.DEBUG)
 
@@ -37,8 +38,8 @@ class DeviceType:
         with open(device_types_db_file, 'w') as f:
             data = json.dumps(device_types)
             f.write(data)
-        self.logger.info('Created device type with device type id ' + str(device_type_id))
-        return device_type_id
+        self.logger.info('Created device type with device type id ' + str(new_device_type_id))
+        return new_device_type_id
 
     def get_device_type(self, device_type_id):
         with open(device_types_db_file, 'r') as f:
