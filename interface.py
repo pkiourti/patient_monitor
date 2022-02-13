@@ -103,7 +103,7 @@ if __name__ == '__main__':
                 diastolic_data = input('Write the diastolic blood pressure you want to record in mmHg: ')
                 json_data = {
                               "measurement": {
-                                "systolic": str(systolic_data), 
+                                "systolic": str(systolic_data),
                                 "diastolic": str(diastolic_data)
                               }
                             }
