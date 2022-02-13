@@ -4,9 +4,9 @@
 name: Patient Monitor Actions 
 on: 
   push:
-    branches: [ main ]
+    branches: [ main, device_module ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, device_module ]
 jobs:
   build:
     runs-on: ubuntu-latest
