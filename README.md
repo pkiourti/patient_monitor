@@ -32,6 +32,7 @@
 #### Measurements Table
 - UserId
 - DeviceId
+- AssignmentId
 - MeasurementId
 - Measurement
 - CreatedAt
@@ -52,6 +53,7 @@
 #### DeviceAssignment Table
 - Id 
 - UserId
+- DeviceId
 - AssignedBy
 - AssignedAt
 - UpdatedAt (will be used when the device was removed for that patient)
