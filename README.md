@@ -2,6 +2,8 @@
 ## Setup
 In order to run the tests or use any part of this code from its home directory you need to set the PYTHONPATH environment variable as follows:
 ```
+$ pwd
+/home/penny/ec530/project2/patient_monitor # make sure you are inside the project
 $ export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
 ```
 
