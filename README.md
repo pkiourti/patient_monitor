@@ -52,6 +52,9 @@ new_assignment_id = da.assign_device(device_id, assigned_by, assignee)
 #### 3. Record a new device measurement
 ```
 from device_measurement import DeviceMeasurement
+import time
+import json
+
 dm = DeviceMeasurement()
 
 data = {}
