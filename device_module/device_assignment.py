@@ -61,7 +61,7 @@ class DeviceAssignment(Device):
         self.logger.info('User ' + str(assigned_by) \
                          + ' successfully assigned device id ' \
                          + str(device_id) + ' to user ' + str(assignee) \
-                         + ' by ' + str(assigned_by) + ' on ' \
+                         + ' on ' \
                          + str(assigned_at) + ' with assignment id ' \
                          + str(new_assignment_id))
         return new_assignment_id
