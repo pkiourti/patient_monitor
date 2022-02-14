@@ -72,8 +72,9 @@ new_measurement_id = dm.record_measurement(json_data)
 ```
 from device import Device
 from device_type import DeviceType
-from device_assignmemnt import DeviceAssignment
+from device_assignment import DeviceAssignment
 from device_measurement import DeviceMeasurement
+import json
 
 d = Device()
 devices = d.get_devices()
@@ -81,7 +82,7 @@ print('Available Devices')
 print(json.dumps(devices, indent=4, sort_keys=True))
 
 dt = DeviceType()
-device_types = d.get_device_types()
+device_types = dt.get_device_types()
 print('Available Device Types')
 print(json.dumps(device_types, indent=4, sort_keys=True))
 
