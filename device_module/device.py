@@ -19,7 +19,7 @@ class Device:
         self.logger = logging.getLogger('Device Logger')
         self.logger.setLevel(logging.DEBUG)
         
-    def check_device_type_id(self, device_type_id):
+    def _check_device_type_id(self, device_type_id):
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         ids = device_types.keys()
@@ -35,7 +35,7 @@ class Device:
             raise ValueError('Device id ' \
                         + str(device_type_id) + ' does not exist')
 
-    def check_mac_address(self, mac_address):
+    def _check_mac_address(self, mac_address):
         six_octets = mac_address.split(':')
         if len(six_octets) != 6:
             self.logger.error('MAC Address %s does not consist of ' + \
@@ -60,7 +60,7 @@ class Device:
                 raise ValueError('MAC Address does not consist of ' + \
                     'hexadecimal numbers', mac_address)
 
-    def check_serial_number(self, serial_number):
+    def _check_serial_number(self, serial_number):
         digits = string.digits
         ascii_letters = string.ascii_letters
         for c in serial_number:
@@ -70,7 +70,7 @@ class Device:
                 raise ValueError('Serial Number %s should contain digits ' + \
                     'or ascii letters', serial_number)
 
-    def check_sw_version(self, sw_version):
+    def _check_sw_version(self, sw_version):
         digits = string.digits
         ascii_letters = string.ascii_letters
         for c in sw_version:
@@ -80,7 +80,20 @@ class Device:
                 raise ValueError('Software Version %s should contain digits'+\
                     ' ascii letters and/or a dot', sw_version)
     
-    def create_device_id(self):
+    def _check_json(self, data):
+        self.logger.info('Parsing sent data')
+        json_data = ''
+        try:
+            json_data = json.loads(data)
+        except:
+            self.logger.error('Expected json data in a str ' \
+                             + 'format but got data in type: ' \
+                             + str(type(data)))
+            raise ValueError('Expected json data in a str ' \
+                             + 'format but got data in type: ' \
+                             + str(type(data)))
+
+    def _create_device_id(self):
         with open(device_db_file, 'r') as f:
             devices = json.load(f)
         ids = devices.keys()
@@ -88,15 +101,33 @@ class Device:
         device_id = max(ids) + 1
         return device_id
 
-    def create_device(self, device_type_id, serial_number, sw_version,
-                    mac_address, purchased_on):
+    def create_device(self, json_data):
         self.logger.info('Creating a new device')
-        self.check_device_type_id(device_type_id)
-        self.check_mac_address(mac_address)
-        self.check_serial_number(serial_number)
-        self.check_sw_version(sw_version)
+
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['device_type_id', 'serial_number', 'sw_version',
+                         'mac_address', 'purchased_on']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError("Missing required data %s", missing_data)
+
+        device_type_id = json_data['device_type_id']
+        mac_address = json_data['mac_address']
+        serial_number = json_data['serial_number']
+        sw_version = json_data['sw_version']
+        purchased_on = json_data['purchased_on']
+
+        self._check_device_type_id(device_type_id)
+        self._check_mac_address(mac_address)
+        self._check_serial_number(serial_number)
+        self._check_sw_version(sw_version)
         created_at = time.time()
-        new_device_id = self.create_device_id()
+        new_device_id = self._create_device_id()
         with open(device_db_file, 'r') as f:
             devices = json.load(f)
         devices[str(new_device_id)] = {
@@ -113,7 +144,18 @@ class Device:
         self.logger.info('Created device with device id %s',str(new_device_id))
         return new_device_id
 
-    def get_device(self, device_id):
+    def get_device(self, json_data):
+        self._check_json(self, json_data)
+        json_data = json.loads(json_data)
+        required_data = ['device_id']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError("Missing required data %s", missing_data)
+
+        device_id = json_data['device_id']
         with open(device_db_file, 'r') as f:
             devices = json.load(f)
         ids = devices.keys()

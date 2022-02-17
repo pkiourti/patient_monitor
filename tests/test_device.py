@@ -7,30 +7,35 @@ import json
 
 def test_create_device_fail():
     device = Device()
-    device_type_id = '0'
     chars = string.ascii_letters + string.digits
-    serial_number = ''.join([random.choice(chars) for _ in range(15)])
-    sw_version = 'T1.0'
-    mac_address = '00005e0053af'
-    purchased_on = time.time()
+    data = {"device_type_id": "0",
+            "serial_number": ''.join([random.choice(chars) for _ in range(15)]),
+            "sw_version": "T1.0",
+            "mac_address": "00005e0053af",
+            "purchased_on": time.time()}
+    json_data = json.dumps(data)
     try:
-        device.create_device(device_type_id, serial_number, sw_version,
-                            mac_address, purchased_on)
+        device.create_device(json_data)
     except ValueError as e:
         assert e.args[0] == 'MAC Address does not consist of ' + \
                     '6 2-digit hexadecimal groups separated by \":\"'
     
 def test_create_device_success():
     device = Device()
-    device_type_id = '0'
     chars = string.ascii_letters + string.digits
-    serial_number = ''.join([random.choice(chars) for _ in range(15)])
-    sw_version = 'T1.0'
-    mac_address = '00:00:5e:00:53:af'
-    purchased_on = time.time()
+    data = {"device_type_id": "0",
+            "serial_number": ''.join([random.choice(chars) for _ in range(15)]),
+            "sw_version": "T1.0",
+            "mac_address": "00:00:5e:00:53:af",
+            "purchased_on": time.time()}
+    json_data = json.dumps(data)
     
-    device_id = device.create_device(device_type_id, serial_number, sw_version,
-                            mac_address, purchased_on)
+    try:
+        device_id = device.create_device(json_data)
+    except ValueError as e:
+        raise ValueError("Expected to create new device with " + str(data) + \
+                         " but got a Value Error " + e.args[0])
+
     assert type(device_id) == int
     with open(os.path.join('db', 'devices.json'), 'r') as f:
         devices = json.load(f)
