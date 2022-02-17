@@ -14,7 +14,7 @@ class DeviceType:
         self.logger = logging.getLogger()
         self.logger.setLevel(logging.DEBUG)
 
-    def check_device_type(self, device_type):
+    def _check_device_type(self, device_type):
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         dev_types = device_types.values()
@@ -25,7 +25,20 @@ class DeviceType:
             raise ValueError('Device type ' + self.device_type + \
                               ' already exists')
 
-    def create_device_type_id(self):
+    def _check_json(self, data):
+        self.logger.info('Parsing sent data')
+        json_data = ''
+        try:
+            json_data = json.loads(data)
+        except:
+            self.logger.error('Expected json data in a str ' \
+                             + 'format but got data in type: ' \
+                             + str(type(data)))
+            raise ValueError('Expected json data in a str ' \
+                             + 'format but got data in type: ' \
+                             + str(type(data)))
+
+    def _create_device_type_id(self):
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         ids = device_types.keys()
@@ -33,9 +46,22 @@ class DeviceType:
         device_type_id = max(ids) + 1
         return device_type_id
 
-    def create_device_type(self, device_type):
-        self.check_device_type(device_type)
-        new_device_type_id = self.create_device_type_id()
+    def create_device_type(self, json_data):
+        self.logger.info('Creating a new device type')
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['device_type']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError("Missing required data %s", missing_data)
+
+        device_type = json_data['device_type']
+        self._check_device_type(device_type)
+        new_device_type_id = self._create_device_type_id()
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         device_types[str(new_device_type_id)] = device_type
@@ -46,7 +72,19 @@ class DeviceType:
                          str(new_device_type_id))
         return new_device_type_id
 
-    def get_device_type(self, device_type_id):
+    def get_device_type(self, json_data):
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['device_type_id']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError("Missing required data %s", missing_data)
+
+        device_type_id = json_data['device_type_id']
         with open(device_types_db_file, 'r') as f:
             device_types = json.load(f)
         if not device_type_id.isdecimal():
