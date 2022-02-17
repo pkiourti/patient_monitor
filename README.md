@@ -22,17 +22,18 @@ from device import Device
 import random
 import string
 import time
+import json
 
 device = Device()
-device_type_id = '0'
 chars = string.ascii_letters + string.digits
-serial_number = ''.join([random.choice(chars) for _ in range(15)])
-sw_version = '1.0'
-mac_address = '00:00:5e:00:53:af'
-purchased_on = time.time()
+data = {"device_type_id": "0",
+        "serial_number": ''.join([random.choice(chars) for _ in range(15)]),
+        "sw_version": "T1.0",
+        "mac_address": "00:00:5e:00:53:af",
+        "purchased_on": time.time()}
+json_data = json.dumps(data)
 
-new_device_id = device.create_device(device_type_id, serial_number, sw_version,
-                            mac_address, purchased_on)
+new_device_id = device.create_device(json_data)
 
 ```
 #### 2. Assign a new device
@@ -40,13 +41,16 @@ new_device_id = device.create_device(device_type_id, serial_number, sw_version,
 from device_assignment import DeviceAssignment
 import random
 import string
+import json
 
 da = DeviceAssignment()
-device_id = '0'
-assigned_by = ''.join([random.choice(string.digits) for _ in range(3)])
-assignee = ''.join([random.choice(string.digits) for _ in range(3)])
-
-new_assignment_id = da.assign_device(device_id, assigned_by, assignee)
+data = {
+        "device_id": '0',
+        "assigned_by": ''.join([random.choice(string.digits) for _ in range(3)]),
+        "assignee": ''.join([random.choice(string.digits) for _ in range(3)])
+       }
+json_data = json.dumps(data)
+new_assignment_id = da.assign_device(json_data)
 
 ```
 #### 3. Record a new device measurement
