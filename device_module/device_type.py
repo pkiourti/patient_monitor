@@ -1,6 +1,7 @@
 import logging
 import os
 import json
+from itertools import compress
 
 device_types_db_file = os.path.join('db', 'device_types.json')
 
@@ -27,9 +28,8 @@ class DeviceType:
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
-        json_data = ''
         try:
-            json_data = json.loads(data)
+            json.loads(data)
         except:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \

@@ -2,6 +2,7 @@ import json
 import logging
 import time
 import os
+from itertools import compress
 
 from device import Device
 
@@ -17,9 +18,8 @@ class DeviceAssignment(Device):
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
-        json_data = ''
         try:
-            json_data = json.loads(data)
+            json.loads(data)
         except:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
@@ -91,7 +91,7 @@ class DeviceAssignment(Device):
                          + str(new_assignment_id))
         return new_assignment_id
 
-    def get_assignment(self, assignment_id):
+    def get_assignment(self, json_data):
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
