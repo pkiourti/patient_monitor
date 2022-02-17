@@ -145,7 +145,7 @@ class Device:
         return new_device_id
 
     def get_device(self, json_data):
-        self._check_json(self, json_data)
+        self._check_json(json_data)
         json_data = json.loads(json_data)
         required_data = ['device_id']
         required_exist = [elem in json_data.keys() for elem in required_data]

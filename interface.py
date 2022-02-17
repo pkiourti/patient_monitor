@@ -57,9 +57,16 @@ if __name__ == '__main__':
             sw_version = input("Write the software version of the device you want to add: ")
             mac_address = input("Write the MAC address of the device you want to add: ")
             purchased_on = input("Write the date of the purchase of the device you want to add: ")
+            json_data = {}
+            json_data['device_type_id'] = device_type_id
+            json_data['serial_number'] = serial_number
+            json_data['sw_version'] = sw_version
+            json_data['mac_address'] = mac_address
+            json_data['purchased_on'] = purchased_on
+            json_data = json.dumps(json_data)
             dev = Device()
             try:
-                dev.create_device(device_type_id, serial_number, sw_version, mac_address, purchased_on)
+                dev.create_device(json_data)
             except ValueError:
                 pass
         elif choice == 6:
@@ -72,8 +79,13 @@ if __name__ == '__main__':
             assigner = input('Write the user id of the assigner: ')
             assignee = input('Write the user id of the assignee: ')
             d = DeviceAssignment()
+            json_data = {}
+            json_data['device_id'] = device_id
+            json_data['assigned_by'] = assigner
+            json_data['assignee'] = assignee
+            json_data = json.dumps(json_data)
             try:
-                dev_assignment = d.assign_device(device_id, assigner, assignee)
+                dev_assignment = d.assign_device(json_data)
             except ValueError:
                 pass
         elif choice == 7:
@@ -83,18 +95,27 @@ if __name__ == '__main__':
             print(json.dumps(assignments, indent=4, sort_keys=True))
             print()
             assignment_id = input('Write the assignment id you want to use: ')
+            json_data = {}
+            json_data['assignment_id'] = assignment_id
+            json_data = json.dumps(json_data)
             try:
-                assignment = d.get_assignment(assignment_id)
+                assignment = d.get_assignment(json_data)
                 device_id = assignment['device_id']
             except ValueError:
                 continue
             try:
-                device = Device().get_device(device_id)
+                json_data = {}
+                json_data['device_id'] = device_id
+                json_data = json.dumps(json_data)
+                device = Device().get_device(json_data)
                 device_type_id = device['device_type_id']
             except ValueError:
                 continue
             try:
-                device_type = DeviceType().get_device_type(device_type_id)
+                json_data = {}
+                json_data['device_type_id'] = device_type_id
+                json_data = json.dumps(json_data)
+                device_type = DeviceType().get_device_type(json_data)
             except ValueError:
                 continue
             if device_type == 'temperature':
