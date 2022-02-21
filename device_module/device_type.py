@@ -20,10 +20,10 @@ class DeviceType:
             device_types = json.load(f)
         dev_types = device_types.values()
         dev_types = [dtype.lower() for dtype in dev_types]
-        if self.device_type.lower() in device_types.values():
-            self.logger.error('Device type ' + self.device_type + \
+        if device_type.lower() in device_types.values():
+            self.logger.error('Device type ' + device_type + \
                               ' already exists')
-            raise ValueError('Device type ' + self.device_type + \
+            raise ValueError('Device type ' + device_type + \
                               ' already exists')
 
     def _check_json(self, data):

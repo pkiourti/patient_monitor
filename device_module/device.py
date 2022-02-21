@@ -33,7 +33,7 @@ class Device:
         if int(device_type_id) not in ids:
             self.logger.error('Device type id ' \
                         + str(device_type_id) + ' does not exist')
-            raise ValueError('Device id ' \
+            raise ValueError('Device type id ' \
                         + str(device_type_id) + ' does not exist')
 
     def _check_mac_address(self, mac_address):

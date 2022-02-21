@@ -75,11 +75,10 @@ class DeviceMeasurement:
                             'Expected device type '+device['device_type_id']+\
                             ' but got '+ str(device_type_id))
 
-    def record_measurement(self, data):
+    def _check_json(self, data):
         self.logger.info('Parsing sent data')
-        json_data = ''
         try:
-            json_data = json.loads(data)
+            json.loads(data)
         except:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
@@ -87,6 +86,10 @@ class DeviceMeasurement:
             raise ValueError('Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
+
+    def record_measurement(self, data):
+        self._check_json(data)
+        json_data = json.loads(data)
 
         required_data = ['device_type_id', 'device_id',
                          'assignment_id', 'measurement', 'timestamp']
@@ -316,6 +319,33 @@ class DeviceMeasurement:
             self.check_diastolic_pressure_data(assignment_id, data)
         if device_type == 'weight':
             self.check_weight_data(assignment_id, data)
+
+    def get_measurement(self, json_data):
+        self._check_json(json_data)
+        json_data = json.loads(json_data)
+        
+        required_data = ['measurement_id']
+        required_exist = [elem in json_data.keys() for elem in required_data]
+        if not all(required_exist):
+            missing_data = list(set(required_data) \
+                    - set(compress(required_data, required_exist)))
+            self.logger.error("Missing required data %s", missing_data)
+            raise ValueError("Missing required data %s", missing_data)
+
+        measurement_id = json_data['measurement_id']
+        with open(device_measurements_db_file, 'r') as f:
+            measurements = json.load(f)
+        if not measurement_id.isdecimal():
+            self.logger.error("Measurement id %s " + \
+                        "is not an decimal number", measurement_id)
+            raise ValueError("Measurement id %s " + \
+                        "is not an decimal number", measurement_id)
+        if measurement_id not in measurements:
+            self.logger.error("Measurement id %s " + \
+                        "does not exist", measurement_id)
+            raise ValueError("Measurement id %s " + \
+                        "does not exist", measurement_id)
+        return measurements[str(measurement_id)]
 
     def get_measurements(self):
         with open(device_measurements_db_file, 'r') as f:
