@@ -32,11 +32,11 @@ jobs:
     - name: Test with pytest
       run: |
         export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
-        python3 api.py
+        python3 api.py &
         pytest
     - name: Run Coverage
       run: |
         export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
-        python3 api.py
+        python3 api.py &
         coverage run -m pytest
         coverage report
