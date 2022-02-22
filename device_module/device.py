@@ -237,7 +237,7 @@ class Device:
             "mac_address": str(mac_address),
             "purchased_on": str(purchased_on),
             "created_at": devices[str(device_id)]["created_at"],
-            "updated_at": time.time()
+            "updated_at": updated_at
         }
         with open(device_db_file, 'w') as f:
             data = json.dumps(devices)
@@ -245,7 +245,6 @@ class Device:
         self.logger.info('Updated device with device id %s',str(device_id))
         return device_id
         
-
     def get_devices(self):
         with open(device_db_file, 'r') as f:
             devices = json.load(f)

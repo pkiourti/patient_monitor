@@ -162,8 +162,6 @@ class DeviceMeasurementList(Resource):
         return device_measurement_module.get_measurements()
 
     def post(self):
-        required_data = ['device_type_id', 'device_id',
-                         'assignment_id', 'measurement', 'timestamp']
         device_type_id = request.form['device_type_id']
         device_id = request.form['device_id']
         assignment_id = request.form['assignment_id']

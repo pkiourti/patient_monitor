@@ -1,6 +1,5 @@
 import requests
 import time
-import json
 
 BASE = "http://127.0.0.1:5000/"
 
@@ -15,7 +14,7 @@ def test_measurement_api():
     response = requests.post(BASE + 'device_measurements', data=json_data)
     measurement_id = response.json()['measurement_id']
     assert response.status_code == 200
-    assert measurement_id.isdecimal() 
+    assert measurement_id.isdecimal()
     print(response.json())
 
     # test put request

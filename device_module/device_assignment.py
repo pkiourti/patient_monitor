@@ -182,7 +182,7 @@ class DeviceAssignment(Device):
             "device_id": str(device_id),
             "assigned_by": str(assigned_by),
             "created_at": assignments[str(assignment_id)]['assigned_at'],
-            "updated_at": time.time(),
+            "updated_at": updated_at,
         }
         with open(device_assignments_db_file, 'w') as f:
             data = json.dumps(assignments)
