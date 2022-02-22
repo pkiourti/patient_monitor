@@ -17,7 +17,8 @@ def test_create_device_fail():
     try:
         device.create_device(json_data)
     except ValueError as e:
-        assert e.args[0] == 'MAC Address does not consist of ' + \
+        assert e.args[0] == 5
+        assert e.args[1] == 'MAC Address does not consist of ' + \
                     '6 2-digit hexadecimal groups separated by \":\"'
     
 def test_create_device_success():
