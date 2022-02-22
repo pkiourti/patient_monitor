@@ -170,8 +170,8 @@ class DeviceType(Resource):
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 3:
-                abort(400,
-                    message="Device type id {} is not a string containing a decimal number".format(device_type_id))
+                abort(400, message="Device type id {} is not " +\
+                    "a string containing a decimal number".format(device_type_id))
             if e.args[0] == 4:
                 abort(404, message="Device type id {} does not exist".format(device_type_id))
             if e.args[0] == 10:
