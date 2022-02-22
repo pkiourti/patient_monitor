@@ -30,12 +30,12 @@ class DeviceMeasurement:
         if not device_id.isdecimal():
             self.logger.error("Device id %s is not an decimal number",
                                 device_id)
-            raise ValueError("Device id %s is not an decimal number",
+            raise ValueError(1, "Device id %s is not an decimal number",
                                 device_id)
         if device_id not in ids:
             self.logger.error('Device id ' \
                         + str(device_id) + ' does not exist')
-            raise ValueError('Device id ' \
+            raise ValueError(2, 'Device id ' \
                         + str(device_id) + ' does not exist')
 
     def _check_device_type(self, device_type_id):
@@ -45,12 +45,12 @@ class DeviceMeasurement:
         if not device_type_id.isdecimal():
             self.logger.error("Device type id %s is not an decimal number",
                                 device_type_id)
-            raise ValueError("Device type id %s is not an decimal number",
+            raise ValueError(3, "Device type id %s is not an decimal number",
                                 device_type_id)
         if device_type_id not in ids:
             self.logger.error('Device type id '+str(device_type_id)+\
                               ' does not exist')
-            raise ValueError('Device type id '+str(device_type_id)+\
+            raise ValueError(4, 'Device type id '+str(device_type_id)+\
                               ' does not exist')
 
     def _check_assignment_id(self, device_id, device_type_id, assignment_id):
@@ -60,20 +60,20 @@ class DeviceMeasurement:
         if not assignment_id.isdecimal():
             self.logger.error("Assignment id %s is not an decimal number",
                                 assignment_id)
-            raise ValueError("Assignment id %s is not an decimal number",
+            raise ValueError(13, "Assignment id %s is not an decimal number",
                                 assignment_id)
 
         if assignment_id not in ids:
             self.logger.error('Assignment id '+str(assignment_id)+\
                               ' does not exist')
-            raise ValueError('Assignment id '+str(assignment_id)+\
+            raise ValueError(14, 'Assignment id '+str(assignment_id)+\
                               ' does not exist')
         assignment = assignments[str(assignment_id)]
         if device_id != assignment['device_id']:
             self.logger.error('Wrong device id sent. ' + \
                               'Expected device '+assignment['device_id'] + \
                               ' but got ' + str(device_id))
-            raise ValueError('Wrong device id sent. '+\
+            raise ValueError(15, 'Wrong device id sent. '+\
                             'Expected device '+assignment['device_id']+\
                             ' but got '+ str(device_id))
         device_id = assignment['device_id']
@@ -84,7 +84,7 @@ class DeviceMeasurement:
             self.logger.error('Wrong device type id sent. ' + \
                     'Expected device type '+device['device_type_id'] + \
                     ' but got ' + str(device_type_id))
-            raise ValueError('Wrong device type id sent. '+\
+            raise ValueError(16, 'Wrong device type id sent. '+\
                             'Expected device type '+device['device_type_id']+\
                             ' but got '+ str(device_type_id))
 
@@ -94,12 +94,12 @@ class DeviceMeasurement:
         if not measurement_id.isdecimal():
             self.logger.error("Measurement id %s " + \
                         "is not an decimal number", measurement_id)
-            raise ValueError("Measurement id %s " + \
+            raise ValueError(17, "Measurement id %s " + \
                         "is not an decimal number", measurement_id)
         if measurement_id not in measurements:
             self.logger.error("Measurement id %s " + \
                         "does not exist", measurement_id)
-            raise ValueError("Measurement id %s " + \
+            raise ValueError(18, "Measurement id %s " + \
                         "does not exist", measurement_id)
 
     def _check_json(self, data):
@@ -110,7 +110,7 @@ class DeviceMeasurement:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
-            raise ValueError('Expected json data in a str ' \
+            raise ValueError(10, 'Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
 
@@ -125,7 +125,7 @@ class DeviceMeasurement:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
         
         device_type_id = json_data['device_type_id']
         device_id = json_data['device_id']
@@ -172,7 +172,7 @@ class DeviceMeasurement:
         if str(device_type_id) not in device_types:
             self.logger.error('Device type id ' \
                         + str(device_type_id) + ' does not exist')
-            raise ValueError('Device type id ' \
+            raise ValueError(4, 'Device type id ' \
                         + str(device_type_id) + ' does not exist')
         device_type = device_types[str(device_type_id)]
 
@@ -184,14 +184,14 @@ class DeviceMeasurement:
         except ValueError:
             self.logger.error(str(assignment_id) + \
                 ": Temperature sent %s is not a number", data)
-            raise ValueError(str(assignment_id) + \
+            raise ValueError(19, str(assignment_id) + \
                 ": Temperature sent %s is not a number", data)
             
         if data > 105 or data < 82:
             self.logger.error(str(assignment_id) + \
                 ": Temperature data sent are outside of possible range "\
                     + '[82 Fahrenheit, 105 Fahrenheit]')
-            raise ValueError(str(assignment_id) + \
+            raise ValueError(20, str(assignment_id) + \
                 ": Temperature data sent are outside of possible range "\
                     + '[82 Fahrenheit, 105 Fahrenheit]')
 
@@ -199,7 +199,7 @@ class DeviceMeasurement:
         if not data.isdecimal():
             self.logger.error(str(assignment_id) + \
                 ": Oxygen data sent %s is not an decimal number", data)
-            raise ValueError(str(assignment_id) + \
+            raise ValueError(21, str(assignment_id) + \
                 ": Oxygen data sent %s is not an decimal number", data)
         data = int(data)
         if data > 100 or data < 0:
@@ -207,7 +207,7 @@ class DeviceMeasurement:
                     + 'Oxygen level in the blood ' \
                     + ' data sent are outside of possible range '\
                     + '[0, 100] (percentage of oxygen in the blood)')
-            raise ValueError(str(assignment_id) + ': ' \
+            raise ValueError(22, str(assignment_id) + ': ' \
                     + 'Oxygen level in the blood ' \
                     + ' data sent are outside of possible range '\
                     + '[0, 100] (percentage of oxygen in the blood)')
@@ -216,13 +216,13 @@ class DeviceMeasurement:
         if 'systolic' not in data:
             self.logger.error(str(self.assignment_id) + \
                 ": Systolic pressure data not sent in %s", data)
-            raise ValueError(str(self.assignment_id) + \
+            raise ValueError(23, str(self.assignment_id) + \
                 ": Systolic pressure data not sent in %s", data)
         if not data['systolic'].isdecimal():
             self.logger.error(str(self.assignment_id) + \
                 ": Systolic pressure data sent %s is not an decimal number",
                 data)
-            raise ValueError(str(self.assignment_id) + \
+            raise ValueError(24, str(self.assignment_id) + \
                 ": Systolic pressure data sent %s is not an decimal number",
                 data)
         systolic = int(data['systolic'])
@@ -231,7 +231,7 @@ class DeviceMeasurement:
                     + 'Systolic blood pressure' \
                     + ' data sent are outside of possible range '\
                     + '[80mmHg, 200mmHg]')
-            raise ValueError(str(assignment_id) + ': ' + \
+            raise ValueError(25, str(assignment_id) + ': ' + \
                     + 'Systolic blood pressure' \
                     + ' data sent are outside of possible range '\
                     + '[80mmHg, 200mmHg]')
@@ -240,13 +240,13 @@ class DeviceMeasurement:
         if 'diastolic' not in data:
             self.logger.error(str(self.assignment_id) + \
                 ": Diastolic pressure data not sent in %s", data)
-            raise ValueError(str(self.assignment_id) + \
+            raise ValueError(26, str(self.assignment_id) + \
                 ": Diastolic pressure data not sent in %s", data)
         if not data['diastolic'].isdecimal():
             self.logger.error(str(self.assignment_id) + \
                 ": Systolic pressure data sent %s is not an decimal number",
                 data)
-            raise ValueError(str(self.assignment_id) + \
+            raise ValueError(27, str(self.assignment_id) + \
                 ": Systolic pressure data sent %s is not an decimal number",
                 data)
         diastolic = int(data['diastolic'])
@@ -255,7 +255,7 @@ class DeviceMeasurement:
                     + 'Diastolic blood pressure'\
                     + ' data sent are outside of possible range '\
                     + '[30mmHg, 150mmHg]')
-            raise ValueError(str(assignment_id) + ': ' + \
+            raise ValueError(28, str(assignment_id) + ': ' + \
                     + 'Diastolic blood pressure'\
                     + ' data sent are outside of possible range '\
                     + '[30mmHg, 150mmHg]')
@@ -264,7 +264,7 @@ class DeviceMeasurement:
         if not data.isdecimal():
             self.logger.error(str(self.assignment_id) + \
                 ": Pulse data sent %s is not an decimal number", data)
-            raise ValueError(str(self.assignment_id) + \
+            raise ValueError(29, str(self.assignment_id) + \
                 ": Pulse data sent %s is not an decimal number", data)
         data = int(data)
         if data > 480 or data < 27:
@@ -272,7 +272,7 @@ class DeviceMeasurement:
                     + 'Pulse ' \
                     + ' data sent are outside of possible range '\
                     + '[27bpm, 480bpm]')
-            raise ValueError(str(assignment_id) + ': ' + \
+            raise ValueError(30, str(assignment_id) + ': ' + \
                     + 'Pulse ' \
                     + ' data sent are outside of possible range '\
                     + '[27bpm, 480bpm]')
@@ -283,14 +283,14 @@ class DeviceMeasurement:
         except ValueError:
             self.logger.error(str(assignment_id) + \
                 ": Weight sent %s is not a number", data)
-            raise ValueError(str(assignment_id) + \
+            raise ValueError(31, str(assignment_id) + \
                 ": Weight sent %s is not a number", data)
         if data > 1400 or data < 2:
             self.logger.error(str(assignment_id) + ': ' + \
                     + 'Weight ' \
                     + ' data sent are outside of possible range '\
                     + '[2lbs, 1400lbs]')
-            raise ValueError(str(assignment_id) + ': ' + \
+            raise ValueError(32, str(assignment_id) + ': ' + \
                     + 'Weight ' \
                     + ' data sent are outside of possible range '\
                     + '[2lbs, 1400lbs]')
@@ -299,7 +299,7 @@ class DeviceMeasurement:
         if not data.isdecimal():
             self.logger.error(str(assignment_id) + \
                 ": Blood glucose level sent %s is not an decimal number", data)
-            raise ValueError(str(assignment_id) + \
+            raise ValueError(33, str(assignment_id) + \
                 ": Blood glucose level sent %s is not an decimal number", data)
         data = int(data)
         if data > 147.6 or data < 10:
@@ -307,7 +307,7 @@ class DeviceMeasurement:
                     + 'Blood glucose level ' \
                     + ' data sent are outside of possible range '\
                     + '[10mg/dL, 147mg/dL]')
-            raise ValueError(str(assignment_id) + ': ' + \
+            raise ValueError(34, str(assignment_id) + ': ' + \
                     + 'Blood glucose level ' \
                     + ' data sent are outside of possible range '\
                     + '[10mg/dL, 147mg/dL]')
@@ -337,7 +337,7 @@ class DeviceMeasurement:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         measurement_id = json_data['measurement_id']
         self._check_measurement_id(measurement_id)
@@ -355,7 +355,7 @@ class DeviceMeasurement:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         measurement_id = json_data['measurement_id']
         self._check_measurement_id(measurement_id)
@@ -383,7 +383,7 @@ class DeviceMeasurement:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
         
         device_type_id = json_data['device_type_id']
         device_id = json_data['device_id']

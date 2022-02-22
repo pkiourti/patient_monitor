@@ -24,7 +24,7 @@ class DeviceAssignment(Device):
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
-            raise ValueError('Expected json data in a str ' \
+            raise ValueError(10, 'Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
 
@@ -35,12 +35,12 @@ class DeviceAssignment(Device):
         if not device_id.isdecimal():
             self.logger.error("Device id %s is not an decimal number",
                               device_id)
-            raise ValueError("Device id %s is not an decimal number",
+            raise ValueError(1, "Device id %s is not an decimal number",
                               device_id)
         if device_id not in ids:
             self.logger.error('Device id ' \
                         + str(device_id) + ' does not exist')
-            raise ValueError('Device id ' \
+            raise ValueError(2, 'Device id ' \
                         + str(device_id) + ' does not exist')
 
     def _check_assignment_id(self, assignment_id):
@@ -49,12 +49,12 @@ class DeviceAssignment(Device):
         if not assignment_id.isdecimal():
             self.logger.error("Assignment id %s " + \
                         "is not an decimal number", assignment_id)
-            raise ValueError("Assignment id %s " + \
+            raise ValueError(13, "Assignment id %s " + \
                         "is not an decimal number", assignment_id)
         if assignment_id not in assignments:
             self.logger.error("Assignment id %s " + \
                         "does not exist", assignment_id)
-            raise ValueError("Assignment id %s " + \
+            raise ValueError(14, "Assignment id %s " + \
                         "does not exist", assignment_id)
 
     def _create_assignment_id(self):
@@ -75,7 +75,7 @@ class DeviceAssignment(Device):
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_id = json_data['device_id']
         assigned_by = json_data['assigned_by']
@@ -118,7 +118,7 @@ class DeviceAssignment(Device):
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         assignment_id = json_data['assignment_id']
         self._check_assignment_id(assignment_id)
@@ -136,7 +136,7 @@ class DeviceAssignment(Device):
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         assignment_id = json_data['assignment_id']
         self._check_assignment_id(assignment_id)
@@ -163,7 +163,7 @@ class DeviceAssignment(Device):
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         assignment_id = json_data['assignment_id']
         device_id = json_data['device_id']

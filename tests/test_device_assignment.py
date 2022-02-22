@@ -17,7 +17,8 @@ def test_create_assignment_fail():
     try:
         da.assign_device(json_data)
     except ValueError as e:
-        assert e.args[0] == 'Device id '+ data['device_id'] + ' does not exist'
+        assert e.args[0] == 2
+        assert e.args[1] == 'Device id '+ data['device_id'] + ' does not exist'
     
 def test_create_device_success():
     da = DeviceAssignment()

@@ -22,7 +22,8 @@ def test_create_measurement_fail():
     try:
         da.record_measurement(json_data)
     except ValueError as e:
-        assert e.args[0] == 'Wrong device id sent. '+\
+        assert e.args[0] == 15
+        assert e.args[1] == 'Wrong device id sent. '+\
                             'Expected device '+str(device_id) + \
                             ' but got '+ data['device_id']
     

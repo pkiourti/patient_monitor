@@ -21,12 +21,12 @@ class DeviceType:
         if not device_type_id.isdecimal():
             self.logger.error("Device type id %s " + \
                         "is not an decimal number", device_type_id)
-            raise ValueError("Device type id %s " + \
+            raise ValueError(3, "Device type id %s " + \
                         "is not an decimal number", device_type_id)
         if device_type_id not in device_types:
             self.logger.error('Device type id ' \
                         + device_type_id + ' does not exist')
-            raise ValueError('Device type id ' \
+            raise ValueError(4, 'Device type id ' \
                         + device_type_id + ' does not exist')
 
     def _check_device_type(self, device_type):
@@ -37,7 +37,7 @@ class DeviceType:
         if device_type.lower() in device_types.values():
             self.logger.error('Device type ' + device_type + \
                               ' already exists')
-            raise ValueError('Device type ' + device_type + \
+            raise ValueError(12, 'Device type ' + device_type + \
                               ' already exists')
 
     def _check_json(self, data):
@@ -48,7 +48,7 @@ class DeviceType:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
-            raise ValueError('Expected json data in a str ' \
+            raise ValueError(10, 'Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
 
@@ -71,7 +71,7 @@ class DeviceType:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_type = json_data['device_type']
         self._check_device_type(device_type)
@@ -96,7 +96,7 @@ class DeviceType:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_type_id = json_data['device_type_id']
         self._check_device_type_id(device_type_id)
@@ -116,7 +116,7 @@ class DeviceType:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_type_id = json_data['device_type_id']
         device_type = json_data['device_type']
@@ -145,7 +145,7 @@ class DeviceType:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_type_id = json_data['device_type_id']
 
