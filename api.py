@@ -26,7 +26,8 @@ class Device(Resource):
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 1:
-                abort(400, message="Device id {} is not a string containing a decimal number".format(device_id))
+                abort(400, 
+                    message="Device id {} is not a string containing a decimal number".format(device_id))
             if e.args[0] == 2:
                 abort(400, message="Device id {} does not exist".format(device_id))
         response['device_id'] = device_id
