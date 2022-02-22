@@ -28,12 +28,12 @@ class Device:
         if not device_id.isdecimal():
             self.logger.error("Device id %s " + \
                         "is not an decimal number", device_id)
-            raise ValueError("Device id %s " + \
+            raise ValueError(1, "Device id %s " + \
                         "is not an decimal number", device_id)
         if int(device_id) not in ids:
             self.logger.error('Device id ' \
                         + device_id + ' does not exist')
-            raise ValueError('Device id ' \
+            raise ValueError(2, "msg":'Device id ' \
                         + device_id + ' does not exist')
 
     def _check_device_type_id(self, device_type_id):
@@ -43,12 +43,12 @@ class Device:
         if not device_type_id.isdecimal():
             self.logger.error("Device type id %s " + \
                         "is not an decimal number", device_type_id)
-            raise ValueError("Device type id %s " + \
+            raise ValueError(3, "Device type id %s " + \
                         "is not an decimal number", device_type_id)
         if device_type_id not in ids:
             self.logger.error('Device type id ' \
                         + device_type_id + ' does not exist')
-            raise ValueError('Device type id ' \
+            raise ValueError(4, 'Device type id ' \
                         + device_type_id + ' does not exist')
 
     def _check_mac_address(self, mac_address):
@@ -57,7 +57,7 @@ class Device:
             self.logger.error('MAC Address %s does not consist of ' + \
                     '6 2-digit hexadecimal groups separated by \":\"',
                     mac_address)
-            raise ValueError('MAC Address does not consist of ' + \
+            raise ValueError(5, 'MAC Address does not consist of ' + \
                     '6 2-digit hexadecimal groups separated by \":\"',
                     mac_address)
         for hex_part in six_octets:
@@ -65,7 +65,7 @@ class Device:
                 self.logger.error('MAC Address does not consist of '+ \
                     '2 digit hexadecimal groups. Should be in the format' +\
                     'xx:xx:xx:xx:xx:xx', mac_address)
-                raise ValueError('MAC Address does not consist of '+\
+                raise ValueError(6, 'MAC Address does not consist of '+\
                     '2 digit hexadecimal groups. Should be in the format' +\
                     'xx:xx:xx:xx:xx:xx', mac_address)
             try:
@@ -73,7 +73,7 @@ class Device:
             except ValueError:
                 self.logger.error('MAC Address %s does not consist of ' + \
                     'hexadecimal numbers', mac_address)
-                raise ValueError('MAC Address does not consist of ' + \
+                raise ValueError(7, 'MAC Address does not consist of ' + \
                     'hexadecimal numbers', mac_address)
 
     def _check_serial_number(self, serial_number):
@@ -83,7 +83,7 @@ class Device:
             if c not in digits and c not in ascii_letters:
                 self.logger.error('Serial Number %s should contain digits ' + \
                     'or ascii letters', serial_number)
-                raise ValueError('Serial Number %s should contain digits ' + \
+                raise ValueError(8, 'Serial Number %s should contain digits ' + \
                     'or ascii letters', serial_number)
 
     def _check_sw_version(self, sw_version):
@@ -93,7 +93,7 @@ class Device:
             if c not in digits and c not in ascii_letters and c != '.':
                 self.logger.error('Software Version %s should contain digits'+\
                     ' ascii letters and/or a dot', sw_version)
-                raise ValueError('Software Version %s should contain digits'+\
+                raise ValueError(9, 'Software Version %s should contain digits'+\
                     ' ascii letters and/or a dot', sw_version)
     
     def _check_json(self, data):
@@ -104,7 +104,7 @@ class Device:
             self.logger.error('Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
-            raise ValueError('Expected json data in a str ' \
+            raise ValueError(10, 'Expected json data in a str ' \
                              + 'format but got data in type: ' \
                              + str(type(data)))
 
@@ -129,7 +129,7 @@ class Device:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_type_id = json_data['device_type_id']
         mac_address = json_data['mac_address']
@@ -168,7 +168,7 @@ class Device:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_id = json_data['device_id']
         self._check_device_id(device_id)
@@ -185,7 +185,7 @@ class Device:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_id = json_data['device_id']
         self._check_device_id(device_id)
@@ -210,7 +210,7 @@ class Device:
             missing_data = list(set(required_data) \
                     - set(compress(required_data, required_exist)))
             self.logger.error("Missing required data %s", missing_data)
-            raise ValueError("Missing required data %s", missing_data)
+            raise ValueError(11, "Missing required data %s", missing_data)
 
         device_id = json_data['device_id']
         device_type_id = json_data['device_type_id']
