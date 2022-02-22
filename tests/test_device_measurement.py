@@ -36,7 +36,6 @@ def test_create_device_success():
     data['timestamp'] = time.time()
     json_data = json.dumps(data)
     measurement_id = da.record_measurement(json_data)
-    assert type(measurement_id) == int
     with open(device_measurements_db_file, 'r') as f:
         measurements = json.load(f)
-    assert str(measurement_id) in measurements
+    assert measurement_id in measurements

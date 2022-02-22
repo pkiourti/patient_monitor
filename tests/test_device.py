@@ -36,7 +36,6 @@ def test_create_device_success():
         raise ValueError("Expected to create new device with " + str(data) + \
                          " but got a Value Error " + e.args[0])
 
-    assert type(device_id) == int
     with open(os.path.join('db', 'devices.json'), 'r') as f:
         devices = json.load(f)
-    assert str(device_id) in devices
+    assert device_id in devices

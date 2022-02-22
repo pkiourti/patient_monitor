@@ -32,7 +32,6 @@ def test_create_device_success():
     except ValueError as e:
         raise ValueError("Expected to assign device " + str(data) + \
                          " but got a Value Error " + e.args[0])
-    assert type(assignment_id) == int
     with open(device_assignments_db_file, 'r') as f:
         assignments = json.load(f)
-    assert str(assignment_id) in assignments
+    assert assignment_id in assignments
