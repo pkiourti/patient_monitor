@@ -19,8 +19,16 @@ device_args = reqparse.RequestParser()
 
 class Device(Resource):
     def get(self, device_id):
-        json_data = json.dumps({"device_id": str(device_id)})
-        response = device_module.get_device(json_data)
+        json_data = json.dumps({"device_id": device_id})
+        try:
+            response = device_module.get_device(json_data)
+        except ValueError as e:
+            if e.args[0] == 11:
+                abort(400, message=e.args[1])
+            if e.args[0] == 1:
+                abort(400, message="Device id {} is not a string containing a decimal number".format(device_id))
+            if e.args[0] == 2:
+                abort(400, message="Device id {} does not exist".format(device_id))
         response['device_id'] = device_id
         return response
 

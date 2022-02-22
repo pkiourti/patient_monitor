@@ -33,7 +33,7 @@ class Device:
         if int(device_id) not in ids:
             self.logger.error('Device id ' \
                         + device_id + ' does not exist')
-            raise ValueError(2, "msg":'Device id ' \
+            raise ValueError(2, 'Device id ' \
                         + device_id + ' does not exist')
 
     def _check_device_type_id(self, device_type_id):
