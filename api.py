@@ -31,7 +31,7 @@ class Device(Resource):
             if e.args[0] == 2:
                 abort(404, message="Device id {} does not exist".format(device_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
         response['device_id'] = device_id
         return response
@@ -40,7 +40,7 @@ class Device(Resource):
         json_data = json.dumps({"device_id": str(device_id)})
         try:
             response = device_module.delete_device(json_data)
-        except:
+        except ValueError as e:
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 1:
@@ -49,9 +49,9 @@ class Device(Resource):
             if e.args[0] == 2:
                 abort(404, message="Device id {} does not exist".format(device_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
-        return response 
+        return response
 
     def put(self, device_id):
         json_data = {"device_id": str(device_id)}
@@ -69,7 +69,7 @@ class Device(Resource):
 
         try:
             response = device_module.update_device(json_data)
-        except:
+        except ValueError as e:
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 1:
@@ -89,14 +89,14 @@ class Device(Resource):
             if e.args[0] == 7:
                 abort(400, message="MAC Address doesn't consist of hex numbers".format(mac_address))
             if e.args[0] == 8:
-                abort(400, 
+                abort(400,
                   message="Serial number doesn't contain only digits or ascii letters".format(serial_number))
             if e.args[0] == 9:
-                abort(400, 
+                abort(400,
                   message="Software version doesn't contain only digits, "\
                             "ascii letters and/or a dot".format(serial_number))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
         return response
            
@@ -119,7 +119,7 @@ class DeviceList(Resource):
         json_data = json.dumps(json_data)
         try:
             device_id = device_module.create_device(json_data)
-        except:
+        except ValueError as e:
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 1:
@@ -139,14 +139,14 @@ class DeviceList(Resource):
             if e.args[0] == 7:
                 abort(400, message="MAC Address doesn't consist of hex numbers".format(mac_address))
             if e.args[0] == 8:
-                abort(400, 
+                abort(400,
                   message="Serial number doesn't contain only digits or ascii letters".format(serial_number))
             if e.args[0] == 9:
-                abort(400, 
+                abort(400,
                   message="Software version doesn't contain only digits, "\
                             "ascii letters and/or a dot".format(serial_number))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
         return {"device_id": device_id}
 
@@ -160,11 +160,11 @@ class DeviceType(Resource):
                 abort(400, message=e.args[1])
             if e.args[0] == 3:
                 abort(400,
-                    message="Device type id {} is not a string containing a decimal number".format(device_id))
+                    message="Device type id {} is not a string containing a decimal number".format(device_type_id))
             if e.args[0] == 4:
-                abort(404, message="Device type id {} does not exist".format(device_id))
+                abort(404, message="Device type id {} does not exist".format(device_type_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
         response['device_type_id'] = device_type_id
         return response
@@ -182,9 +182,9 @@ class DeviceType(Resource):
             if e.args[0] == 4:
                 abort(404, message="Device type id {} does not exist".format(device_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
-        return response 
+        return response
 
     def put(self, device_type_id):
         json_data = {"device_type_id": str(device_type_id)}
@@ -198,15 +198,15 @@ class DeviceType(Resource):
                 abort(400, message=e.args[1])
             if e.args[0] == 3:
                 abort(400,
-                   message="Device type id {} is not a string containing a decimal number".format(device_id))
+                   message="Device type id {} is not a string containing a decimal number".format(device_type_id))
             if e.args[0] == 4:
-                abort(404, message="Device type id {} does not exist".format(device_id))
+                abort(404, message="Device type id {} does not exist".format(device_type_id))
             if e.args[0] == 12:
                 abort(404, message="Device type {} already exists".format(device_type))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
-        return response 
+        return response
 
 class DeviceTypeList(Resource):
     def get(self):
@@ -224,13 +224,13 @@ class DeviceTypeList(Resource):
                 abort(400, message=e.args[1])
             if e.args[0] == 3:
                 abort(400,
-                   message="Device type id {} is not a string containing a decimal number".format(device_id))
+                   message="Device type id {} is not a string containing a decimal number".format(device_type_id))
             if e.args[0] == 4:
-                abort(404, message="Device type id {} does not exist".format(device_id))
+                abort(404, message="Device type id {} does not exist".format(device_type_id))
             if e.args[0] == 12:
                 abort(404, message="Device type {} already exists".format(device_type))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
         return {"device_type_id": device_type_id}
 
@@ -241,15 +241,15 @@ class DeviceAssignment(Resource):
             response = device_assignment_module.get_assignment(json_data)
         except ValueError as e:
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 13:
                 abort(400,
-                   message="Assignment id {} is not a string containing a decimal number".format(device_id))
+                   message="Assignment id {} is not a string containing a decimal number".format(assignment_id))
             if e.args[0] == 14:
-                abort(404, message="Assignment id {} does not exist".format(device_id))
+                abort(404, message="Assignment id {} does not exist".format(assignment_id))
         response['assignment_id'] = assignment_id
         return response
 
@@ -259,15 +259,15 @@ class DeviceAssignment(Resource):
             response = device_assignment_module.delete_assignment(json_data)
         except ValueError as e:
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 13:
                 abort(400,
-                   message="Assignment id {} is not a string containing a decimal number".format(device_id))
+                   message="Assignment id {} is not a string containing a decimal number".format(assignment_id))
             if e.args[0] == 14:
-                abort(404, message="Assignment id {} does not exist".format(device_id))
+                abort(404, message="Assignment id {} does not exist".format(assignment_id))
         return response
 
     def put(self, assignment_id):
@@ -288,7 +288,7 @@ class DeviceAssignment(Resource):
             if e.args[0] == 2:
                 abort(404, message="Device id {} does not exist".format(device_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
@@ -321,15 +321,15 @@ class DeviceAssignmentList(Resource):
             if e.args[0] == 2:
                 abort(404, message="Device id {} does not exist".format(device_id))
             if e.args[0] == 10:
-                abort(400, 
+                abort(400,
                   message="Data sent are not in json format")
             if e.args[0] == 11:
                 abort(400, message=e.args[1])
             if e.args[0] == 13:
                 abort(400,
-                   message="Assignment id {} is not a string containing a decimal number".format(device_id))
+                   message="Assignment id {} is not a string containing a decimal number".format(assignment_id))
             if e.args[0] == 14:
-                abort(404, message="Assignment id {} does not exist".format(device_id))
+                abort(404, message="Assignment id {} does not exist".format(assignment_id))
         return {"assignment_id": assignment_id}
 
 class DeviceMeasurement(Resource):
