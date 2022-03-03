@@ -7,6 +7,8 @@ $ pwd
 $ export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
 ```
 
+## The API exists under the 'rest_api' branch 
+
 ## Design of Chat Module
 
 #### Message Table
