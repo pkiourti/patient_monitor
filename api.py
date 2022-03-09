@@ -5,8 +5,8 @@ from flask_restful import Resource, Api, reqparse, abort
 import sys
 sys.path.append('./device_module')
 
-app = Flask(__name__)
-api = Api(app)
+application = Flask(__name__)
+api = Api(application)
 
 from device import Device
 from device_type import DeviceType
@@ -337,6 +337,6 @@ api.add_resource(DeviceAssignment, '/device_assignments/<string:assignment_id>')
 api.add_resource(DeviceMeasurementList, '/device_measurements')
 api.add_resource(DeviceMeasurement, '/device_measurements/<string:measurement_id>')
 
-@app.route('/')
+@application.route('/')
 def index():
     return "<h1>Patient Monitor App!</h1>"
