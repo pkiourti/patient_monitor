@@ -340,6 +340,3 @@ api.add_resource(DeviceMeasurement, '/device_measurements/<string:measurement_id
 @app.route('/')
 def index():
     return "<h1>Patient Monitor App!</h1>"
-
-if __name__ == '__main__':
-    app.run(debug=True) # not for production
