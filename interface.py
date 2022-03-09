@@ -1,6 +1,9 @@
 # use code to prettyprint a json from https://tinyurl.com/3mmbzvdd
 # use example interface from https://tinyurl.com/ycvsceju
 
+import sys
+sys.path.append('./device_module')
+
 from device_type import DeviceType
 from device import Device
 from device_assignment import DeviceAssignment

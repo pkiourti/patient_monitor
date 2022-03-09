@@ -1,3 +1,6 @@
+import sys
+sys.path.append('./device_module')
+
 from device import Device
 import random
 import string

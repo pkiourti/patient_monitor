@@ -1,3 +1,6 @@
+import sys
+sys.path.append('./device_module')
+
 from device_measurement import DeviceMeasurement
 import time
 import os
