@@ -7,6 +7,23 @@ $ pwd
 $ export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
 ```
 
+## The API exists under the 'rest_api' branch 
+
+## Design of Chat Module
+
+#### Message Table
+- MessageID
+- Sender
+- Recipient
+- Time
+- DeviceId
+- VoiceMessage
+- Media
+- SessionId
+- Text
+
+I will use a key-value document database because it provides better performance when there are multiple columns. Additionally a chat module will need to perform a lot of read/write operations so a document database seems a better option than SQL.
+
 ## Documentation
 The code currently supports:
 1) adding a new device
