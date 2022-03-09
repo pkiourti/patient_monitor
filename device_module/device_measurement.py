@@ -244,10 +244,10 @@ class DeviceMeasurement:
                 ": Diastolic pressure data not sent in %s", data)
         if not data['diastolic'].isdecimal():
             self.logger.error(str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number",
+                ": Diastolic pressure data sent %s is not an decimal number",
                 data)
             raise ValueError(27, str(self.assignment_id) + \
-                ": Systolic pressure data sent %s is not an decimal number",
+                ": Diastolic pressure data sent %s is not an decimal number",
                 data)
         diastolic = int(data['diastolic'])
         if diastolic > 150 or diastolic < 30:
