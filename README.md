@@ -1,13 +1,14 @@
 # Project 2 - Patient Monitor Platform
 ## Setup
-In order to run the tests or use any part of this code from its home directory you need to set the PYTHONPATH environment variable as follows:
+In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
 $ pwd
 /home/penny/ec530/project2/patient_monitor # make sure you are inside the project
-$ export PYTHONPATH="${PYTHONPATH}:$(pwd)/device_module"
+$ export FLASK_APP="application.py"
+$ flask run
 ```
-
-## The API exists under the 'rest_api' branch 
+## AWS URL
+The application exists in the following AWS url: http://patientmonitorapi-env.eba-6st5ekmx.us-east-1.elasticbeanstalk.com/
 
 ## Design of Chat Module
 
