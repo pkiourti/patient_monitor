@@ -20,49 +20,49 @@ device_measurement_module = DeviceMeasurement()
 
 device_args = reqparse.RequestParser()
 
-def error(e):
+def error(e, **kwargs):
     if e.args[0] == 1:
         abort(400,
-            message="Device id {} is not a string containing a decimal number".format(device_id))
+            message="Device id {} is not a string containing a decimal number".format(kwargs['device_id']))
     if e.args[0] == 2:
-        abort(404, message="Device id {} does not exist".format(device_id))
+        abort(404, message="Device id {} does not exist".format(kwargs['device_id']))
     if e.args[0] == 3:
         abort(400,
-           message="Device type id {} is not a string containing a decimal number".format(device_id))
+           message="Device type id {} is not a string containing a decimal number".format(kwargs['device_id']))
     if e.args[0] == 4:
-        abort(404, message="Device type id {} does not exist".format(device_id))
+        abort(404, message="Device type id {} does not exist".format(kwargs['device_id']))
     if e.args[0] == 5:
-        abort(400, message="MAC Address doesn't consist of 6 octets".format(mac_address))
+        abort(400, message="MAC Address doesn't consist of 6 octets".format(kwargs['mac_address']))
     if e.args[0] == 6:
-        abort(400, message="MAC Address doesn't consist of two-digit hex groups".format(mac_address))
+        abort(400, message="MAC Address doesn't consist of two-digit hex groups".format(kwargs['mac_address']))
     if e.args[0] == 7:
-        abort(400, message="MAC Address doesn't consist of hex numbers".format(mac_address))
+        abort(400, message="MAC Address doesn't consist of hex numbers".format(kwargs['mac_address']))
     if e.args[0] == 8:
         abort(400,
-          message="Serial number doesn't contain only digits or ascii letters".format(serial_number))
+          message="Serial number doesn't contain only digits or ascii letters".format(kwargs['serial_number']))
     if e.args[0] == 9:
         abort(400, message="Software version doesn't contain only digits, "\
-                    "ascii letters and/or a dot".format(serial_number))
+                    "ascii letters and/or a dot".format(kwargs['serial_number']))
     if e.args[0] == 10:
         abort(400, message="Data sent are not in json format")
     if e.args[0] == 11:
         abort(400, message=e.args[1])
     if e.args[0] == 12:
-        abort(404, message="Device type {} already exists".format(device_type))
+        abort(404, message="Device type {} already exists".format(kwargs['device_type']))
     if e.args[0] == 13:
         abort(400, message="Assignment id {} is not " +\
-            "a string containing a decimal number".format(assignment_id))
+            "a string containing a decimal number".format(kwargs['assignment_id']))
     if e.args[0] == 14:
-        abort(404, message="Assignment id {} does not exist".format(assignment_id))
+        abort(404, message="Assignment id {} does not exist".format(kwargs['assignment_id']))
     if e.args[0] == 15:
         abort(404, message="Wrong device id sent")
     if e.args[0] == 16:
         abort(404, message="Wrong device type id sent")
     if e.args[0] == 17:
         abort(400, message="Measurement id {} is not " +\
-            "a string containing a decimal number".format(measurement_id))
+            "a string containing a decimal number".format(kwargs['measurement_id']))
     if e.args[0] == 18:
-        abort(404, message="Measurement id {} does not exist".format(measurement_id))
+        abort(404, message="Measurement id {} does not exist".format(kwargs['measurement_id']))
     if e.args[0] == 19:
         abort(400, message="Temperature sent is not a number")
     if e.args[0] == 20:
@@ -116,7 +116,7 @@ class Device(Resource):
         try:
             response = device_module.get_device(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_id=device_id)
         response['device_id'] = device_id
         return response
 
@@ -125,7 +125,7 @@ class Device(Resource):
         try:
             response = device_module.delete_device(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_id=device_id)
         return response
 
     def put(self, device_id):
@@ -145,7 +145,8 @@ class Device(Resource):
         try:
             response = device_module.update_device(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_id=device_id, device_type_id=device_type_id,
+                    serial_number=serial_number, mac_address=mac_address)
         return response
            
 class DeviceList(Resource):
@@ -168,7 +169,8 @@ class DeviceList(Resource):
         try:
             device_id = device_module.create_device(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_id=device_id, device_type_id=device_type_id,
+                    serial_number=serial_number, mac_address=mac_address)
         return {"device_id": device_id}
 
 class DeviceType(Resource):
@@ -177,7 +179,7 @@ class DeviceType(Resource):
         try:
             response = device_type_module.get_device_type(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_type_id=device_type_id)
         response['device_type_id'] = device_type_id
         return response
 
@@ -186,7 +188,7 @@ class DeviceType(Resource):
         try:
             response = device_type_module.delete_device_type(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_type_id=device_type_id)
         return response
 
     def put(self, device_type_id):
@@ -197,7 +199,7 @@ class DeviceType(Resource):
         try:
             response = device_type_module.update_device_type(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_type_id=device_type_id, device_type=device_type)
         return response
 
 class DeviceTypeList(Resource):
@@ -212,7 +214,7 @@ class DeviceTypeList(Resource):
         try:
             device_type_id = device_type_module.create_device_type(json_data)
         except ValueError as e:
-            error(e)
+            error(e, device_type=device_type)
         return {"device_type_id": device_type_id}
 
 class DeviceAssignment(Resource):
@@ -221,7 +223,7 @@ class DeviceAssignment(Resource):
         try:
             response = device_assignment_module.get_assignment(json_data)
         except ValueError as e:
-            error(e)
+            error(e, assignment_id=assignment_id)
         response['assignment_id'] = assignment_id
         return response
 
@@ -230,7 +232,7 @@ class DeviceAssignment(Resource):
         try:
             response = device_assignment_module.delete_assignment(json_data)
         except ValueError as e:
-            error(e)
+            error(e, assignment_id=assignment_id)
         return response
 
     def put(self, assignment_id):
@@ -245,7 +247,7 @@ class DeviceAssignment(Resource):
         try:
             response = device_assignment_module.update_assignment(json_data)
         except ValueError as e:
-            error(e)
+            error(e, assignment_id=assignment_id, device_id=device_id)
         return response
 
 class DeviceAssignmentList(Resource):
@@ -264,7 +266,7 @@ class DeviceAssignmentList(Resource):
         try:
             assignment_id = device_assignment_module.assign_device(json_data)
         except ValueError as e:
-            error(e)
+            error(e, assignment_id=assignment_id, device_id=device_id)
         return {"assignment_id": assignment_id}
 
 class DeviceMeasurement(Resource):
@@ -273,7 +275,7 @@ class DeviceMeasurement(Resource):
         try:
             response = device_measurement_module.get_measurement(json_data)
         except ValueError as e:
-            error(e)
+            error(e, measurement_id=measurement_id)
         response['measurement_id'] = measurement_id
         return response
 
@@ -282,7 +284,7 @@ class DeviceMeasurement(Resource):
         try:
             response = device_measurement_module.delete_measurement(json_data)
         except ValueError as e:
-            error(e)
+            error(e, measurement_id=measurement_id)
         return response
 
     def put(self, measurement_id):
@@ -301,7 +303,8 @@ class DeviceMeasurement(Resource):
         try:
             response = device_measurement_module.update_measurement(json_data)
         except ValueError as e:
-            error(e)
+            error(e, measurement_id=measurement_id, assignment_id=assignment_id, 
+                     device_type_id=device_type_id, device_id=device_id)
         return response
 
 class DeviceMeasurementList(Resource):
@@ -324,7 +327,8 @@ class DeviceMeasurementList(Resource):
         try:
             measurement_id = device_measurement_module.record_measurement(json_data)
         except ValueError as e:
-            error(e)
+            error(e, measurement_id=measurement_id, assignment_id=assignment_id, 
+                     device_type_id=device_type_id, device_id=device_id)
         return {"measurement_id": measurement_id}
 
 
