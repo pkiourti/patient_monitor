@@ -28,18 +28,19 @@ def error(e, **kwargs):
         abort(404, message="Device id {} does not exist".format(kwargs['device_id']))
     if e.args[0] == 3:
         abort(400,
-           message="Device type id {} is not a string containing a decimal number".format(kwargs['device_id']))
+          message="Device type id {} is not a string containing a decimal number".format(kwargs['device_id']))
     if e.args[0] == 4:
         abort(404, message="Device type id {} does not exist".format(kwargs['device_id']))
     if e.args[0] == 5:
         abort(400, message="MAC Address doesn't consist of 6 octets".format(kwargs['mac_address']))
     if e.args[0] == 6:
-        abort(400, message="MAC Address doesn't consist of two-digit hex groups".format(kwargs['mac_address']))
+        abort(400, 
+            message="MAC Address doesn't consist of two-digit hex groups".format(kwargs['mac_address']))
     if e.args[0] == 7:
         abort(400, message="MAC Address doesn't consist of hex numbers".format(kwargs['mac_address']))
     if e.args[0] == 8:
         abort(400,
-          message="Serial number doesn't contain only digits or ascii letters".format(kwargs['serial_number']))
+         message="Serial number doesn't contain only digits or ascii letters".format(kwargs['serial_number']))
     if e.args[0] == 9:
         abort(400, message="Software version doesn't contain only digits, "\
                     "ascii letters and/or a dot".format(kwargs['serial_number']))
@@ -303,7 +304,7 @@ class DeviceMeasurement(Resource):
         try:
             response = device_measurement_module.update_measurement(json_data)
         except ValueError as e:
-            error(e, measurement_id=measurement_id, assignment_id=assignment_id, 
+            error(e, measurement_id=measurement_id, assignment_id=assignment_id,
                      device_type_id=device_type_id, device_id=device_id)
         return response
 
@@ -327,7 +328,7 @@ class DeviceMeasurementList(Resource):
         try:
             measurement_id = device_measurement_module.record_measurement(json_data)
         except ValueError as e:
-            error(e, measurement_id=measurement_id, assignment_id=assignment_id, 
+            error(e, measurement_id=measurement_id, assignment_id=assignment_id,
                      device_type_id=device_type_id, device_id=device_id)
         return {"measurement_id": measurement_id}
 
