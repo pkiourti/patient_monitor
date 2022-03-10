@@ -34,7 +34,7 @@ def error(e, **kwargs):
     if e.args[0] == 5:
         abort(400, message="MAC Address doesn't consist of 6 octets".format(kwargs['mac_address']))
     if e.args[0] == 6:
-        abort(400, 
+        abort(400,
             message="MAC Address doesn't consist of two-digit hex groups".format(kwargs['mac_address']))
     if e.args[0] == 7:
         abort(400, message="MAC Address doesn't consist of hex numbers".format(kwargs['mac_address']))
