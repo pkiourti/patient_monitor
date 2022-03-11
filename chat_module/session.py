@@ -29,6 +29,22 @@ class Session:
             raise ValueError(36, 'Session id ' \
                         + session_id + ' does not exist')
 
+    def _check_device_id(self, device_id):
+        with open(device_db_file, 'r') as f:
+            devices = json.load(f)
+        ids = devices.keys()
+        ids = [int(id) for id in ids] if ids else [-1]
+        if not device_id.isdecimal():
+            self.logger.error("Device id %s " + \
+                        "is not an decimal number", device_id)
+            raise ValueError(1, "Device id %s " + \
+                        "is not an decimal number", device_id)
+        if int(device_id) not in ids:
+            self.logger.error('Device id ' \
+                        + device_id + ' does not exist')
+            raise ValueError(2, 'Device id ' \
+                        + device_id + ' does not exist')
+
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
         try:

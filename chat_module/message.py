@@ -28,13 +28,29 @@ class Message:
         if not session_id.isdecimal():
             self.logger.error("Session id %s " + \
                         "is not an decimal number", session_id)
-            raise ValueError(1, "Session id %s " + \
+            raise ValueError(35, "Session id %s " + \
                         "is not an decimal number", session_id)
         if int(session_id) not in ids:
             self.logger.error('Session id ' \
                         + session_id + ' does not exist')
-            raise ValueError(2, 'Session id ' \
+            raise ValueError(36, 'Session id ' \
                         + session_id + ' does not exist')
+
+    def _check_message_id(self, message_id):
+        with open(messages_db_file, 'r') as f:
+            messages = json.load(f)
+        ids = messages.keys()
+        ids = [int(id) for id in ids] if ids else [-1]
+        if not message_id.isdecimal():
+            self.logger.error("Message id %s " + \
+                        "is not an decimal number", message_id)
+            raise ValueError(37, "Message id %s " + \
+                        "is not an decimal number", message_id)
+        if int(message_id) not in ids:
+            self.logger.error('Message id ' \
+                        + message_id + ' does not exist')
+            raise ValueError(38, 'Message id ' \
+                        + message_id + ' does not exist')
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')

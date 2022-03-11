@@ -109,6 +109,16 @@ def error(e, **kwargs):
         abort(404, message="Blood glucose level " \
                     + " data sent are outside of possible range "\
                     + "[10mg/dL, 147mg/dL]")
+    if e.args[0] == 35:
+        abort(400,
+            message="Session id {} is not a string containing a decimal number".format(kwargs['session_id']))
+    if e.args[0] == 36:
+        abort(404, message="Session id {} does not exist".format(kwargs['session_id']))
+    if e.args[0] == 37:
+        abort(400,
+            message="Message id {} is not a string containing a decimal number".format(kwargs['message_id']))
+    if e.args[0] == 38:
+        abort(404, message="Message id {} does not exist".format(kwargs['message_id']))
     
 
 class Device(Resource):
@@ -332,6 +342,104 @@ class DeviceMeasurementList(Resource):
                      device_type_id=device_type_id, device_id=device_id)
         return {"measurement_id": measurement_id}
 
+class Session(Resource):
+    def get(self, session_id):
+        json_data = json.dumps({"session_id": session_id})
+        try:
+            response = session_module.get_device(json_data)
+        except ValueError as e:
+            error(e, session_id=session_id)
+        response['session_id'] = session_id
+        return response
+
+    def delete(self, session_id):
+        json_data = json.dumps({"session_id": str(session_id)})
+        try:
+            response = session_module.delete_session(json_data)
+        except ValueError as e:
+            error(e, session_id=session_id)
+        return response
+
+    def put(self, session_id):
+        json_data = {"session_id": str(session_id)}
+        device_id = request.form['device_id']
+        participants = request.form['participants']
+        json_data['device_id'] = device_id
+        json_data['participants'] = participants
+        json_data = json.dumps(json_data)
+
+        try:
+            response = session_module.update_session(json_data)
+        except ValueError as e:
+            error(e, session_id=session_id, device_id=device_id)
+        return response
+           
+class SessionList(Resource):
+    def get(self):
+        return session_module.get_sessions()
+
+    def post(self):
+        device_id = request.form['device_id']
+        participants = request.form['participants']
+        json_data = {}
+        json_data['device_id'] = device_id
+        json_data['participants'] = participants
+        json_data = json.dumps(json_data)
+        try:
+            session_id = session_module.create_session(json_data)
+        except ValueError as e:
+            error(e, device_id=device_id)
+        return {"session_id": session_id}
+
+class Message(Resource):
+    def get(self, message_id):
+        json_data = json.dumps({"message_id": message_id})
+        try:
+            response = message_module.get_device(json_data)
+        except ValueError as e:
+            error(e, message_id=message_id)
+        response['message_id'] = message_id
+        return response
+
+    def delete(self, message_id):
+        json_data = json.dumps({"message_id": str(message_id)})
+        try:
+            response = message_module.delete_message(json_data)
+        except ValueError as e:
+            error(e, message_id=message_id)
+        return response
+
+    def put(self, message_id):
+        json_data = {"message_id": str(message_id)}
+        session_id = request.form['session_id']
+        message = request.form['message']
+        json_data['session_id'] = session_id
+        json_data['message'] = message
+        json_data = json.dumps(json_data)
+
+        try:
+            response = message.update_message(json_data)
+        except ValueError as e:
+            error(e, session_id=session_id, message_id=message_id, message=message)
+        return response
+           
+class MessageList(Resource):
+    def get(self):
+        return message_module.get_messages()
+
+    def post(self):
+        session_id = request.form['session_id']
+        message = request.form['message']
+        json_data = {}
+        json_data['session_id'] = session_id
+        json_data['message'] = message
+        json_data = json.dumps(json_data)
+        try:
+            message_id = message_module.create_message(json_data)
+        except ValueError as e:
+            error(e, session_id=session_id, message=message)
+        return {"message_id": message_id}
+
 
 api.add_resource(DeviceList, '/devices')
 api.add_resource(Device, '/devices/<string:device_id>')
@@ -341,6 +449,10 @@ api.add_resource(DeviceAssignmentList, '/device_assignments')
 api.add_resource(DeviceAssignment, '/device_assignments/<string:assignment_id>')
 api.add_resource(DeviceMeasurementList, '/device_measurements')
 api.add_resource(DeviceMeasurement, '/device_measurements/<string:measurement_id>')
+api.add_resource(SessionList, '/sessions')
+api.add_resource(Session, '/sessions/<string:session_id>')
+api.add_resource(MessageList, '/messages')
+api.add_resource(Message, '/messages/<string:message_id>')
 
 @application.route('/')
 def index():
