@@ -7,7 +7,7 @@ sessions_db_file = os.path.join('db', 'sessions.json')
 
 class Session:
     """
-    Class that creates a new Device Type
+    Class that creates a new Session
     """
 
     def __init__(self):
