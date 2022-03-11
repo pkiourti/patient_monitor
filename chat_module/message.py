@@ -3,7 +3,6 @@
 
 import time
 import logging
-import string
 import json
 import os
 from itertools import compress
