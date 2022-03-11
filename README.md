@@ -14,14 +14,18 @@ The application exists in the following AWS url: http://patientmonitorapi-env.eb
 
 #### Message Table
 - MessageID
+- SessionID
 - Sender
-- Recipient
-- Time
-- DeviceId
-- VoiceMessage
-- Media
+- Created_at
+- Updated_at
+- Message: { VoiceMessage: "", Media: "", Text: ""}
+- Sender
+
+#### Session Table
 - SessionId
-- Text
+- Device_id
+- Participants
+- Created_at
 
 I will use a key-value document database because it provides better performance when there are multiple columns. Additionally a chat module will need to perform a lot of read/write operations so a document database seems a better option than SQL.
 
