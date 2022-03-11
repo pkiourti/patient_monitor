@@ -3,7 +3,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse, abort
 
 import sys
-sys.path.append('./device_module')
+sys.path.extend(['./device_module', './chat_module'])
 
 application = Flask(__name__)
 api = Api(application)
@@ -12,11 +12,15 @@ from device import Device
 from device_type import DeviceType
 from device_assignment import DeviceAssignment
 from device_measurement import DeviceMeasurement
+from message import Message
+from session import Session
 
 device_module = Device()
 device_type_module = DeviceType()
 device_assignment_module = DeviceAssignment()
 device_measurement_module = DeviceMeasurement()
+session_module = Session()
+message_module = Message()
 
 device_args = reqparse.RequestParser()
 
@@ -346,7 +350,7 @@ class Session(Resource):
     def get(self, session_id):
         json_data = json.dumps({"session_id": session_id})
         try:
-            response = session_module.get_device(json_data)
+            response = session_module.get_session(json_data)
         except ValueError as e:
             error(e, session_id=session_id)
         response['session_id'] = session_id
@@ -362,8 +366,8 @@ class Session(Resource):
 
     def put(self, session_id):
         json_data = {"session_id": str(session_id)}
-        device_id = request.form['device_id']
-        participants = request.form['participants']
+        device_id = request.json['device_id']
+        participants = request.json['participants']
         json_data['device_id'] = device_id
         json_data['participants'] = participants
         json_data = json.dumps(json_data)
@@ -379,8 +383,8 @@ class SessionList(Resource):
         return session_module.get_sessions()
 
     def post(self):
-        device_id = request.form['device_id']
-        participants = request.form['participants']
+        device_id = request.json['device_id']
+        participants = request.json['participants']
         json_data = {}
         json_data['device_id'] = device_id
         json_data['participants'] = participants
@@ -395,10 +399,10 @@ class Message(Resource):
     def get(self, message_id):
         json_data = json.dumps({"message_id": message_id})
         try:
-            response = message_module.get_device(json_data)
+            response = message_module.get_message(json_data)
         except ValueError as e:
             error(e, message_id=message_id)
-        response['message_id'] = message_id
+        response["message_id"] = message_id
         return response
 
     def delete(self, message_id):
@@ -411,14 +415,16 @@ class Message(Resource):
 
     def put(self, message_id):
         json_data = {"message_id": str(message_id)}
-        session_id = request.form['session_id']
-        message = request.form['message']
+        session_id = request.json['session_id']
+        message = request.json['message']
+        sender = request.json['sender']
         json_data['session_id'] = session_id
         json_data['message'] = message
+        json_data['sender'] = sender
         json_data = json.dumps(json_data)
 
         try:
-            response = message.update_message(json_data)
+            response = message_module.update_message(json_data)
         except ValueError as e:
             error(e, session_id=session_id, message_id=message_id, message=message)
         return response
@@ -428,13 +434,17 @@ class MessageList(Resource):
         return message_module.get_messages()
 
     def post(self):
-        session_id = request.form['session_id']
-        message = request.form['message']
+        print(request.json)
+        session_id = request.json['session_id']
+        message = request.json['message']
+        sender = request.json['sender']
         json_data = {}
         json_data['session_id'] = session_id
         json_data['message'] = message
+        json_data['sender'] = sender
         json_data = json.dumps(json_data)
         try:
+            print('inside try')
             message_id = message_module.create_message(json_data)
         except ValueError as e:
             error(e, session_id=session_id, message=message)

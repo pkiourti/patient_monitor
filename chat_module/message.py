@@ -78,7 +78,7 @@ class Message:
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['session_id', 'message']
+        required_data = ['session_id', 'message', 'sender']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -88,9 +88,10 @@ class Message:
 
         session_id = json_data['session_id']
         message = json_data['message']
+        sender = json_data['sender']
 
         self._check_session_id(session_id)
-        self._check_message(message)
+        # self._check_message(message)
         created_at = time.time()
         new_message_id = self._create_message_id()
         with open(messages_db_file, 'r') as f:
@@ -98,7 +99,8 @@ class Message:
         messages[str(new_message_id)] = {
             "session_id": str(session_id),
             "message": message,
-            "created_at": created_at,
+            "sender": sender,
+            "created_at": created_at
         }
         with open(messages_db_file, 'w') as f:
             data = json.dumps(messages)
@@ -150,7 +152,7 @@ class Message:
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['message_id', 'session_id', 'message']
+        required_data = ['message_id', 'session_id', 'message', 'sender']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -161,10 +163,11 @@ class Message:
         message_id = json_data['message_id']
         session_id = json_data['session_id']
         message = json_data['message']
+        sender = json_data['sender']
 
         self._check_message_id(message_id)
         self._check_session_id(session_id)
-        self._check_message(message)
+        # self._check_message(message)
         updated_at = time.time()
 
         self.logger.info('Updating message %s', message_id)
@@ -173,7 +176,8 @@ class Message:
         
         messages[str(message_id)] = {
             "session_id": str(session_id),
-            "message": str(message),
+            "message": message,
+            "sender": str(sender),
             "created_at": messages[str(message_id)]["created_at"],
             "updated_at": updated_at
         }

@@ -1,9 +1,11 @@
 import logging
 import os
 import json
+import time
 from itertools import compress
 
 sessions_db_file = os.path.join('db', 'sessions.json')
+device_db_file = os.path.join('db', 'devices.json')
 
 class Session:
     """
@@ -12,7 +14,7 @@ class Session:
 
     def __init__(self):
         logging.basicConfig()
-        self.logger = logging.getLogger()
+        self.logger = logging.getLogger('Session Logger')
         self.logger.setLevel(logging.DEBUG)
 
     def _check_session_id(self, session_id):
@@ -117,13 +119,13 @@ class Session:
             sessions = json.load(f)
         session = sessions[str(session_id)]
 
-        return {"session": session}
+        return session
 
     def update_session(self, json_data):
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['session_id', 'session']
+        required_data = ['session_id', 'device_id', 'participants']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):
             missing_data = list(set(required_data) \
@@ -132,6 +134,7 @@ class Session:
             raise ValueError(11, "Missing required data %s", missing_data)
 
         session_id = json_data['session_id']
+        participants = json_data['participants']
         device_id = json_data['device_id']
 
         self._check_session_id(session_id)
@@ -140,7 +143,12 @@ class Session:
         self.logger.info('Updating session %s', session_id)
         with open(sessions_db_file, 'r') as f:
             sessions = json.load(f)
-        sessions[str(session_id)] = session
+        sessions[str(session_id)] = {
+            "device_id": device_id,
+            "participants": participants,
+            "created_at": sessions[str(session_id)]["created_at"],
+            "updated_at": time.time()
+        }
         with open(sessions_db_file, 'w') as f:
             data = json.dumps(sessions)
             f.write(data)
