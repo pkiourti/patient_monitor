@@ -15,6 +15,7 @@ The application exists in the following AWS url: http://patientmonitorapi-env.eb
 #### Message Table
 - MessageID
 - SessionID
+- Sender
 - Created_at
 - Updated_at
 - Message: { VoiceMessage: "", Media: "", Text: ""}
