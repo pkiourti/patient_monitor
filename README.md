@@ -9,7 +9,11 @@ $ flask run
 ```
 ## Screenshots of API
 Screenshots of GET requests can be found under the folder screenshots. Example:
-![GET devices request](https://github.com/pkiourti/patient_monitor/tree/main/screenshots)
+    <figure>
+        <figcaption>GET device request</figcaption>
+        <br />
+        <img src="https://github.com/pkiourti/patient_monitor/tree/main/screenshots/get-devices.png" />
+    </figure>
 
 ## Design of Chat Module
 
