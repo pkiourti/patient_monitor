@@ -32,13 +32,16 @@ I will use a key-value document database because it provides better performance 
 
 ## Documentation
 The code currently supports:
-1) adding a new device
-2) assigning a device to a user 
-3) recording a new device measurement
-4) getting the available devices, device types, device assignments and device measurements
+1) GET, PUT, DELETE a device. GET all devices, POST a new device.
+2) GET, PUT, DELETE a device type. GET all device types, POST a new device type.
+3) GET, PUT, DELETE a device assignment. GET all device assignments, POST a new device assignment.
+4) GET, PUT, DELETE a device measurement. GET all device measurements, POST a new device measurement.
+5) GET, PUT, DELETE a chat session. GET all chat sessions, POST a new chat session.
+5) GET, PUT, DELETE a chat message. GET all chat messages, POST a new chat message.
 
-Since there is no database at the moment, the recorded data are saved and updated to JSON files under the folder db/. The Device Module code can be found under device_module/.
+Since there is no database at the moment, the recorded data are saved and updated to JSON files under the folder db/. The Device Module code can be found under device_module/. The chat_module can be found under chat_module/
 
+### Examples
 #### 1. Add a new device
 ```
 from device import Device
