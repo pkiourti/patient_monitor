@@ -32,9 +32,9 @@ def error(e, **kwargs):
         abort(404, message="Device id {} does not exist".format(kwargs['device_id']))
     if e.args[0] == 3:
         abort(400,
-          message="Device type id {} is not a string containing a decimal number".format(kwargs['device_id']))
+          message="Device type id {} is not a string containing a decimal number".format(kwargs['device_type_id']))
     if e.args[0] == 4:
-        abort(404, message="Device type id {} does not exist".format(kwargs['device_id']))
+        abort(404, message="Device type id {} does not exist".format(kwargs['device_type_id']))
     if e.args[0] == 5:
         abort(400, message="MAC Address doesn't consist of 6 octets".format(kwargs['mac_address']))
     if e.args[0] == 6:

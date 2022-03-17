@@ -7,8 +7,9 @@ $ pwd
 $ export FLASK_APP="application.py"
 $ flask run
 ```
-## AWS URL
-The application exists in the following AWS url: http://patientmonitorapi-env.eba-6st5ekmx.us-east-1.elasticbeanstalk.com/
+## Screenshots of API
+Screenshots of GET requests can be found under the folder screenshots. Example:
+![GET devices request](https://github.com/pkiourti/patient_monitor/tree/main/screenshots)
 
 ## Design of Chat Module
 
