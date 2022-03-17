@@ -4,7 +4,7 @@ BASE = "http://127.0.0.1:5000/"
 
 def test_message_api():
     # test post request
-    session_id = "1"
+    session_id = "0"
     message = {"text": "Hello"}
     sender = '12'
     json_data = {}
@@ -35,9 +35,9 @@ def test_message_api():
     print(response.json())
 
     # test delete request
-    response = requests.delete(BASE + 'messages/'+message_id)
-    assert response.json() == message_id
-    print(response.json())
+    #response = requests.delete(BASE + 'messages/'+message_id)
+    #assert response.json() == message_id
+    #print(response.json())
 
     # test get request
     response = requests.get(BASE + 'messages')
