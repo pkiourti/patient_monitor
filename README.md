@@ -1,4 +1,5 @@
 # Project 2 - Patient Monitor Platform
+## NOTE: Project 4 exists in a different repository - please check here: https://github.com/pkiourti/queue-system
 ## Setup
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
@@ -27,6 +28,7 @@ Screenshots of GET requests can be found under the folder screenshots. Example:
 - Device_id
 - Participants
 - Created_at
+- Updated_at
 
 I will use a key-value document database because it provides better performance when there are multiple columns. Additionally a chat module will need to perform a lot of read/write operations so a document database seems a better option than SQL.
 
