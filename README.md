@@ -1,5 +1,5 @@
 # Project 2 - Patient Monitor Platform
-## NOTE: Project 4 exists in a different repository - please check here: https://github.com/pkiourti/queue-system
+### NOTE: Project 4 exists in a different repository - please check here: https://github.com/pkiourti/queue-system
 ## Setup
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
