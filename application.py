@@ -3,7 +3,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse, abort
 
 import sys
-sys.path.extend(['./device_module', './chat_module', './users_module'])
+sys.path.extend(['./device_module', './chat_module', './users_module', './auth_module'])
 
 application = Flask(__name__)
 api = Api(application)
@@ -18,6 +18,7 @@ from users import User
 from user_roles import UserRole
 from role_assignments import RoleAssignment
 from patients import Patient
+from auth import Authentication
 
 device_module = Device()
 device_type_module = DeviceType()
@@ -29,6 +30,7 @@ users_module = User()
 user_roles_module = UserRole()
 role_assignment_module = RoleAssignment()
 patient_module = Patient()
+auth_module = Authentication()
 
 device_args = reqparse.RequestParser()
 
@@ -709,6 +711,18 @@ class PatientList(Resource):
             error(e, patient_id=patient_id, user_id=user_id, emergency_contact_id=emergency_contact_id)
         return {"patient_id": patient_id}
 
+class Authentication(Resource):
+    def post(self):
+        email = request.form['email']
+        password = request.form['password']
+
+        json_data = {}
+        json_data['email'] = email
+        json_data['password'] = password
+        json_data = json.dumps(json_data)
+
+        return auth_module.authenticate(json_data)
+
 api.add_resource(DeviceList, '/devices')
 api.add_resource(Device, '/devices/<string:device_id>')
 api.add_resource(DeviceTypeList, '/device_types')
@@ -729,6 +743,7 @@ api.add_resource(UserRoleAssignmentList, '/user_role_assignments')
 api.add_resource(UserRoleAssignment, '/user_role_assignments/<string:role_assignment_id>')
 api.add_resource(PatientList, '/patients')
 api.add_resource(Patient, '/patients/<string:patient_id>')
+api.add_resource(Authentication, '/auth')
 
 @application.route('/')
 def index():
