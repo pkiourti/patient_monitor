@@ -4,12 +4,10 @@ import time
 import os
 from itertools import compress
 
-from device import Device
-
 device_assignments_db_file = os.path.join('db', 'device_assignments.json')
 devices_db_file = os.path.join('db', 'devices.json')
 
-class DeviceAssignment(Device):
+class DeviceAssignment:
 
     def __init__(self):
         logging.basicConfig()

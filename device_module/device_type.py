@@ -34,7 +34,7 @@ class DeviceType:
             device_types = json.load(f)
         dev_types = device_types.values()
         dev_types = [dtype.lower() for dtype in dev_types]
-        if device_type.lower() in device_types.values():
+        if device_type.lower() in device_types:
             self.logger.error('Device type ' + device_type + \
                               ' already exists')
             raise ValueError(12, 'Device type ' + device_type + \
