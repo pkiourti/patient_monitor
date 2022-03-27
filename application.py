@@ -139,12 +139,14 @@ def error(e, **kwargs):
         abort(404, message="User id {} does not exist".format(kwargs['user_id']))
     if e.args[0] == 41:
         abort(400,
-            message="User role id {} is not a string containing a decimal number".format(kwargs['user_role_id']))
+            message="User role id {} is not a string containing " \
+                    "a decimal number".format(kwargs['user_role_id']))
     if e.args[0] == 42:
         abort(404, message="User role id {} does not exist".format(kwargs['user_role_id']))
     if e.args[0] == 43:
         abort(400,
-            message="Role assignment id {} is not a string containing a decimal number".format(kwargs['role_assignment_id']))
+            message="Role assignment id {} is not a string containing " \
+                    "a decimal number".format(kwargs['role_assignment_id']))
     if e.args[0] == 44:
         abort(404, message="Role assignment id {} does not exist".format(kwargs['role_assignment_id']))
     if e.args[0] == 45:
@@ -154,7 +156,8 @@ def error(e, **kwargs):
         abort(404, message="Patient id {} does not exist".format(kwargs['patient_id']))
     if e.args[0] == 47:
         abort(400,
-            message="Emergency contact id {} is not a string containing a decimal number".format(kwargs['emergency_contact_id']))
+            message="Emergency contact id {} is not a string containing " \
+                    "a decimal number".format(kwargs['emergency_contact_id']))
     if e.args[0] == 48:
         abort(404, message="Emergency contact id {} does not exist".format(kwargs['emergency_contact_id']))
     if e.args[0] == 49:
@@ -600,7 +603,7 @@ class UserRoleList(Resource):
         try:
             user_role_id = user_roles_module.create_user_role(json_data)
         except ValueError as e:
-            error(e, user_role=user_role) 
+            error(e, user_role=user_role)
         return {"user_role_id": user_role_id}
 
 class UserRoleAssignment(Resource):

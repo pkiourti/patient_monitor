@@ -145,7 +145,7 @@ class User:
         self._check_json(json_data)
         json_data = json.loads(json_data)
         
-        required_data = ['user_id', 'first_name', 'last_name', 'date_of_birth', 
+        required_data = ['user_id', 'first_name', 'last_name', 'date_of_birth',
                          'address', 'state', 'zipcode', 'phone_number', 'email']
         required_exist = [elem in json_data.keys() for elem in required_data]
         if not all(required_exist):

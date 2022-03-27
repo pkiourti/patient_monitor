@@ -180,7 +180,6 @@ class Patient:
         emergency_contact_id = json_data['emergency_contact_id']
         user_id = json_data['user_id']
         patient_history = json_data['patient_history']
-        created_at = time.time()
 
         self._check_user_id(emergency_contact_id)
         self._check_user_id(user_id)
