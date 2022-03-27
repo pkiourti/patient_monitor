@@ -4,11 +4,11 @@ import time
 import os
 from itertools import compress
 
-role_assignments_db_file = os.path.join('db', 'role_assignments.json')
+role_assignments_db_file = os.path.join('db', 'user_role_assignments.json')
 roles_db_file = os.path.join('db', 'user_roles.json')
 users_db_file = os.path.join('db', 'users.json')
 
-class DeviceAssignment(Device):
+class RoleAssignment:
 
     def __init__(self):
         logging.basicConfig()
@@ -50,12 +50,12 @@ class DeviceAssignment(Device):
         if not user_role_id.isdecimal():
             self.logger.error("User role id %s is not an decimal number",
                               user_role_id)
-            raise ValueError(1, "User role id %s is not an decimal number",
+            raise ValueError(41, "User role id %s is not an decimal number",
                               user_role_id)
         if user_role_id not in ids:
             self.logger.error('User role id ' \
                         + str(user_role_id) + ' does not exist')
-            raise ValueError(2, 'User role id ' \
+            raise ValueError(42, 'User role id ' \
                         + str(user_role_id) + ' does not exist')
 
     def _check_role_assignment_id(self, role_assignment_id):
@@ -64,12 +64,12 @@ class DeviceAssignment(Device):
         if not role_assignment_id.isdecimal():
             self.logger.error("Role assignment id %s " + \
                         "is not an decimal number", role_assignment_id)
-            raise ValueError(13, "Role assignment id %s " + \
+            raise ValueError(43, "Role assignment id %s " + \
                         "is not an decimal number", role_assignment_id)
         if role_assignment_id not in role_assignments:
             self.logger.error("Role assignment id %s " + \
                         "does not exist", role_assignment_id)
-            raise ValueError(14, "Role assignment id %s " + \
+            raise ValueError(44, "Role assignment id %s " + \
                         "does not exist", role_assignment_id)
 
     def _create_role_assignment_id(self):
@@ -180,7 +180,7 @@ class DeviceAssignment(Device):
         role_assignment_id = json_data['role_assignment_id']
         user_role_id = json_data['user_role_id']
         user_id = json_data['user_id']
-        updated_at = json_data['updated_at']
+        updated_at = time.time()
 
         self._check_role_assignment_id(role_assignment_id)
         self._check_user_role_id(user_role_id)
@@ -190,9 +190,9 @@ class DeviceAssignment(Device):
         with open(role_assignments_db_file, 'r') as f:
             role_assignments = json.load(f)
         role_assignments[str(role_assignment_id)] = {
-            "user_id": str(assignee),
+            "user_id": str(user_id),
             "user_role_id": str(user_role_id),
-            "created_at": role_assignments[str(role_assignment_id)]['assigned_at'],
+            "created_at": role_assignments[str(role_assignment_id)]['created_at'],
             "updated_at": updated_at,
         }
         with open(role_assignments_db_file, 'w') as f:

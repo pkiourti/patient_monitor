@@ -3,7 +3,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api, reqparse, abort
 
 import sys
-sys.path.extend(['./device_module', './chat_module'])
+sys.path.extend(['./device_module', './chat_module', './users_module'])
 
 application = Flask(__name__)
 api = Api(application)
@@ -14,6 +14,10 @@ from device_assignment import DeviceAssignment
 from device_measurement import DeviceMeasurement
 from message import Message
 from session import Session
+from users import User
+from user_roles import UserRole
+from role_assignments import RoleAssignment
+from patients import Patient
 
 device_module = Device()
 device_type_module = DeviceType()
@@ -21,6 +25,10 @@ device_assignment_module = DeviceAssignment()
 device_measurement_module = DeviceMeasurement()
 session_module = Session()
 message_module = Message()
+users_module = User()
+user_roles_module = UserRole()
+role_assignment_module = RoleAssignment()
+patient_module = Patient()
 
 device_args = reqparse.RequestParser()
 
@@ -124,7 +132,33 @@ def error(e, **kwargs):
             message="Message id {} is not a string containing a decimal number".format(kwargs['message_id']))
     if e.args[0] == 38:
         abort(404, message="Message id {} does not exist".format(kwargs['message_id']))
-    
+    if e.args[0] == 39:
+        abort(400,
+            message="User id {} is not a string containing a decimal number".format(kwargs['user_id']))
+    if e.args[0] == 40:
+        abort(404, message="User id {} does not exist".format(kwargs['user_id']))
+    if e.args[0] == 41:
+        abort(400,
+            message="User role id {} is not a string containing a decimal number".format(kwargs['user_role_id']))
+    if e.args[0] == 42:
+        abort(404, message="User role id {} does not exist".format(kwargs['user_role_id']))
+    if e.args[0] == 43:
+        abort(400,
+            message="Role assignment id {} is not a string containing a decimal number".format(kwargs['role_assignment_id']))
+    if e.args[0] == 44:
+        abort(404, message="Role assignment id {} does not exist".format(kwargs['role_assignment_id']))
+    if e.args[0] == 45:
+        abort(400,
+            message="Patient id {} is not a string containing a decimal number".format(kwargs['patient_id']))
+    if e.args[0] == 46:
+        abort(404, message="Patient id {} does not exist".format(kwargs['patient_id']))
+    if e.args[0] == 47:
+        abort(400,
+            message="Emergency contact id {} is not a string containing a decimal number".format(kwargs['emergency_contact_id']))
+    if e.args[0] == 48:
+        abort(404, message="Emergency contact id {} does not exist".format(kwargs['emergency_contact_id']))
+    if e.args[0] == 49:
+        abort(404, message="User role {} already exists".format(kwargs['user_role']))
 
 class Device(Resource):
     def get(self, device_id):
@@ -435,7 +469,6 @@ class MessageList(Resource):
         return message_module.get_messages()
 
     def post(self):
-        print(request.json)
         session_id = request.json['session_id']
         message = request.json['message']
         sender = request.json['sender']
@@ -451,6 +484,227 @@ class MessageList(Resource):
             error(e, session_id=session_id, message=message)
         return {"message_id": message_id}
 
+class User(Resource):
+    def get(self, user_id):
+        json_data = json.dumps({"user_id": user_id})
+        try:
+            response = users_module.get_user(json_data)
+        except ValueError as e:
+            error(e, user_id=user_id)
+        response['user_id'] = user_id
+        return response
+
+    def delete(self, user_id):
+        json_data = json.dumps({"user_id": str(user_id)})
+        try:
+            response = users_module.delete_user(json_data)
+        except ValueError as e:
+            error(e, user_id=user_id)
+        return response
+
+    def put(self, user_id):
+        json_data = {"user_id": str(user_id)}
+
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        date_of_birth = request.form['date_of_birth']
+        address = request.form['address']
+        state = request.form['state']
+        zipcode = request.form['zipcode']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        json_data['first_name'] = first_name
+        json_data['last_name'] = last_name
+        json_data['date_of_birth'] = date_of_birth
+        json_data['address'] = address
+        json_data['state'] = state
+        json_data['zipcode'] = zipcode
+        json_data['phone_number'] = phone_number
+        json_data['email'] = email
+        json_data = json.dumps(json_data)
+        try:
+            response = users_module.update_user(json_data)
+        except ValueError as e:
+            error(e, user_id=user_id)
+        return response
+           
+class UserList(Resource):
+    def get(self):
+        return users_module.get_users()
+
+    def post(self):
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        date_of_birth = request.form['date_of_birth']
+        address = request.form['address']
+        state = request.form['state']
+        zipcode = request.form['zipcode']
+        phone_number = request.form['phone_number']
+        email = request.form['email']
+        json_data = {}
+        json_data['first_name'] = first_name
+        json_data['last_name'] = last_name
+        json_data['date_of_birth'] = date_of_birth
+        json_data['address'] = address
+        json_data['state'] = state
+        json_data['zipcode'] = zipcode
+        json_data['phone_number'] = phone_number
+        json_data['email'] = email
+        json_data = json.dumps(json_data)
+        try:
+            user_id = users_module.create_user(json_data)
+        except ValueError as e:
+            error(e)
+            print(e)
+        return {"user_id": user_id}
+
+class UserRole(Resource):
+    def get(self, user_role_id):
+        json_data = json.dumps({"user_role_id": user_role_id})
+        try:
+            response = user_roles_module.get_user_role(json_data)
+        except ValueError as e:
+            error(e, user_role_id=user_role_id)
+        response['user_role_id'] = user_role_id
+        return response
+
+    def delete(self, user_role_id):
+        json_data = json.dumps({"user_role_id": str(user_role_id)})
+        try:
+            response = user_roles_module.delete_user_role(json_data)
+        except ValueError as e:
+            error(e, user_role_id=user_role_id)
+        return response
+
+    def put(self, user_role_id):
+        json_data = {"user_role_id": str(user_role_id)}
+
+        user_role = request.form['user_role']
+        json_data['user_role'] = user_role
+        json_data = json.dumps(json_data)
+        try:
+            response = user_roles_module.update_user_role(json_data)
+        except ValueError as e:
+            error(e, user_role_id=user_role_id, user_role=user_role)
+        return response
+
+class UserRoleList(Resource):
+    def get(self):
+        return user_roles_module.get_user_roles()
+
+    def post(self):
+        user_role = request.form['user_role']
+        json_data = {}
+        json_data['user_role'] = user_role
+        json_data = json.dumps(json_data)
+        try:
+            user_role_id = user_roles_module.create_user_role(json_data)
+        except ValueError as e:
+            error(e, user_role=user_role) 
+        return {"user_role_id": user_role_id}
+
+class UserRoleAssignment(Resource):
+    def get(self, role_assignment_id):
+        json_data = json.dumps({"role_assignment_id": role_assignment_id})
+        try:
+            response = role_assignment_module.get_role_assignment(json_data)
+        except ValueError as e:
+            error(e, role_assignment_id=role_assignment_id)
+        response['role_assignment_id'] = role_assignment_id
+        return response
+
+    def delete(self, role_assignment_id):
+        json_data = json.dumps({"role_assignment_id": str(role_assignment_id)})
+        try:
+            response = role_assignment_module.delete_role_assignment(json_data)
+        except ValueError as e:
+            error(e, role_assignment_id=role_assignment_id)
+        return response
+
+    def put(self, role_assignment_id):
+        json_data = {"role_assignment_id": str(role_assignment_id)}
+
+        user_role_id = request.form['user_role_id']
+        user_id = request.form['user_id']
+        json_data['user_role_id'] = user_role_id
+        json_data['user_id'] = user_id
+        json_data = json.dumps(json_data)
+        try:
+            response = role_assignment_module.update_role_assignment(json_data)
+        except ValueError as e:
+            error(e, role_assignment_id=role_assignment_id, user_id=user_id, user_role_id=user_role_id)
+        return response
+
+class UserRoleAssignmentList(Resource):
+    def get(self):
+        return role_assignment_module.get_role_assignments()
+
+    def post(self):
+        user_role_id = request.form['user_role_id']
+        user_id = request.form['user_id']
+        json_data = {}
+        json_data['user_role_id'] = user_role_id
+        json_data['user_id'] = user_id
+        json_data = json.dumps(json_data)
+        try:
+            role_assignment_id = role_assignment_module.assign_role(json_data)
+        except ValueError as e:
+            error(e, user_id=user_id, user_role_id=user_role_id)
+            print(e)
+        return {"role_assignment_id": role_assignment_id}
+
+class Patient(Resource):
+    def get(self, patient_id):
+        json_data = json.dumps({"patient_id": patient_id})
+        try:
+            response = patient_module.get_patient(json_data)
+        except ValueError as e:
+            error(e, patient_id=patient_id)
+        response['patient_id'] = patient_id
+        return response
+
+    def delete(self, patient_id):
+        json_data = json.dumps({"patient_id": str(patient_id)})
+        try:
+            response = patient_module.delete_patient(json_data)
+        except ValueError as e:
+            error(e, patient_id=patient_id)
+        return response
+
+    def put(self, patient_id):
+        json_data = {"patient_id": str(patient_id)}
+
+        emergency_contact_id = request.json['emergency_contact_id']
+        user_id = request.json['user_id']
+        patient_history = request.json['patient_history']
+        json_data['emergency_contact_id'] = emergency_contact_id
+        json_data['user_id'] = user_id
+        json_data['patient_history'] = patient_history
+        json_data = json.dumps(json_data)
+        try:
+            response = patient_module.update_patient(json_data)
+        except ValueError as e:
+            error(e, patient_id=patient_id, user_id=user_id, emergency_contact_id=emergency_contact_id)
+        return response
+           
+class PatientList(Resource):
+    def get(self):
+        return patient_module.get_patients()
+
+    def post(self):
+        emergency_contact_id = request.json['emergency_contact_id']
+        user_id = request.json['user_id']
+        patient_history = request.json['patient_history']
+        json_data = {}
+        json_data['emergency_contact_id'] = emergency_contact_id
+        json_data['user_id'] = user_id
+        json_data['patient_history'] = patient_history
+        json_data = json.dumps(json_data)
+        try:
+            patient_id = patient_module.create_patient(json_data)
+        except ValueError as e:
+            error(e, patient_id=patient_id, user_id=user_id, emergency_contact_id=emergency_contact_id)
+        return {"patient_id": patient_id}
 
 api.add_resource(DeviceList, '/devices')
 api.add_resource(Device, '/devices/<string:device_id>')
@@ -464,6 +718,14 @@ api.add_resource(SessionList, '/sessions')
 api.add_resource(Session, '/sessions/<string:session_id>')
 api.add_resource(MessageList, '/messages')
 api.add_resource(Message, '/messages/<string:message_id>')
+api.add_resource(UserList, '/users')
+api.add_resource(User, '/users/<string:user_id>')
+api.add_resource(UserRoleList, '/user_roles')
+api.add_resource(UserRole, '/user_roles/<string:user_role_id>')
+api.add_resource(UserRoleAssignmentList, '/user_role_assignments')
+api.add_resource(UserRoleAssignment, '/user_role_assignments/<string:role_assignment_id>')
+api.add_resource(PatientList, '/patients')
+api.add_resource(Patient, '/patients/<string:patient_id>')
 
 @application.route('/')
 def index():

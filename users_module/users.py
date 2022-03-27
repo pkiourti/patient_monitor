@@ -36,6 +36,8 @@ class User:
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
+        print(data)
+        print(type(data))
         try:
             json.loads(data)
         except:

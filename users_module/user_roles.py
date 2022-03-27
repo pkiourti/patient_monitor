@@ -15,18 +15,18 @@ class UserRole:
         self.logger = logging.getLogger('User roles Logger')
         self.logger.setLevel(logging.DEBUG)
 
-    def _check_role_id(self, role_id):
+    def _check_user_role_id(self, user_role_id):
         with open(user_roles_db_file, 'r') as f:
             user_roles = json.load(f)
         if not user_role_id.isdecimal():
-            self.logger.error("Role id %s " + \
+            self.logger.error("User role id %s " + \
                         "is not an decimal number", user_role_id)
-            raise ValueError(3, "Role id %s " + \
+            raise ValueError(41, "User role id %s " + \
                         "is not an decimal number", user_role_id)
         if user_role_id not in user_roles:
-            self.logger.error('Role id ' \
+            self.logger.error('User role id ' \
                         + user_role_id + ' does not exist')
-            raise ValueError(4, 'Role id ' \
+            raise ValueError(42, 'User role id ' \
                         + user_role_id + ' does not exist')
 
     def _check_user_role(self, user_role):
@@ -34,10 +34,10 @@ class UserRole:
             user_roles = json.load(f)
         user_roles = user_roles.values()
         user_roles = [role.lower() for role in user_roles]
-        if user_role.lower() in user_roles.values():
+        if user_role.lower() in user_roles:
             self.logger.error('User role ' + user_role + \
                               ' already exists')
-            raise ValueError(12, 'User role ' + user_role + \
+            raise ValueError(49, 'User role ' + user_role + \
                               ' already exists')
 
     def _check_json(self, data):
@@ -56,6 +56,7 @@ class UserRole:
         with open(user_roles_db_file, 'r') as f:
             user_roles = json.load(f)
         ids = user_roles.keys()
+        print(ids)
         ids = [int(id) for id in ids] if ids else [-1]
         user_role_id = max(ids) + 1
         return user_role_id

@@ -10,7 +10,7 @@ from itertools import compress
 patients_db_file = os.path.join('db', 'patients.json')
 users_db_file = os.path.join('db', 'users.json')
 
-class User:
+class Patient:
     """
     Class that creates a new patient record
     """
@@ -25,14 +25,14 @@ class User:
         ids = patients.keys()
         ids = [int(id) for id in ids] if ids else [-1]
         if not patient_id.isdecimal():
-            self.logger.error("User id %s " + \
+            self.logger.error("Patient id %s " + \
                         "is not an decimal number", patient_id)
-            raise ValueError(39, "User id %s " + \
+            raise ValueError(45, "Patient id %s " + \
                         "is not an decimal number", patient_id)
         if int(patient_id) not in ids:
-            self.logger.error('User id ' \
+            self.logger.error('Patient id ' \
                         + patient_id + ' does not exist')
-            raise ValueError(40, 'User id ' \
+            raise ValueError(46, 'Patient id ' \
                         + patient_id + ' does not exist')
 
     def _check_user_id(self, user_id):
@@ -50,6 +50,22 @@ class User:
                         + user_id + ' does not exist')
             raise ValueError(40, 'User id ' \
                         + user_id + ' does not exist')
+
+    def _check_emergency_contact_id(self, emergency_contact_id):
+        with open(users_db_file, 'r') as f:
+            users = json.load(f)
+        ids = users.keys()
+        ids = [int(id) for id in ids] if ids else [-1]
+        if not emergency_contact_id.isdecimal():
+            self.logger.error("User id %s " + \
+                        "is not an decimal number", emergency_contact_id)
+            raise ValueError(47, "User id %s " + \
+                        "is not an decimal number", emergency_contact_id)
+        if int(emergency_contact_id) not in ids:
+            self.logger.error('User id ' \
+                        + emergency_contact_id + ' does not exist')
+            raise ValueError(48, 'User id ' \
+                        + emergency_contact_id + ' does not exist')
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
@@ -90,7 +106,7 @@ class User:
         patient_history = json_data['patient_history']
         created_at = time.time()
 
-        self._check_user_id(emergency_contact_id)
+        self._check_emergency_contact_id(emergency_contact_id)
         self._check_user_id(user_id)
 
         new_patient_id = self._create_patient_id()
@@ -179,7 +195,7 @@ class User:
             "user_id": user_id,
             "patient_history": patient_history,
             "created_at": patients[str(patient_id)]["created_at"],
-            "updated_at": timet.time()
+            "updated_at": time.time()
         }
         with open(patients_db_file, 'w') as f:
             data = json.dumps(patients)
