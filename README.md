@@ -176,8 +176,9 @@ Choose your option:
 - PhoneNumber
 - Email
 
-#### Emergency Contact Table
+#### Patient Table
 - UserId
+- PatientHistory (Json)
 - EmergencyContactId
 
 #### Roles Table
@@ -188,6 +189,7 @@ Choose your option:
 - UserId
 - RoleId
 - CreatedAt
+- UpdatedAt
 
 #### Measurements Type Table
 - MeasurementId
