@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import React, { Component } from 'react';
-import { LoginPage } from './components';
+import { LoginPage, UsersView } from './components';
 
 export default class App extends Component {
     constructor(props) {
@@ -10,12 +10,14 @@ export default class App extends Component {
         this.onEmailChange = this.onEmailChange.bind(this)
         this.onPasswordChange = this.onPasswordChange.bind(this)
         this.onPress = this.onPress.bind(this)
+        this.fetchUsers = this.fetchUsers.bind(this)
         this.state = {
-            base: "https://a51b-209-6-154-124.ngrok.io/",
             viewLoginPage: true,
             email: '',
             password: '',
-            selected: false
+            selected: false,
+            tableData: [],
+            tableHead: [],
         }
     }
 
@@ -27,18 +29,34 @@ export default class App extends Component {
         this.setState({password: password})
     }
 
+    fetchUsers() {
+        fetch("https://a51b-209-6-154-124.ngrok.io/users", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/plain, */*",
+            },
+        }).then(response =>
+            response.json().then(data => {
+                this.setState({tableHead: data["head"], tableData: data["data"], viewLoginPage: false})
+            })
+        ).catch(error => {
+            console.log(error)
+        });
+    }
+
     onPress() {
         json_data = {"email": this.state.email, "password": this.state.password}
-        fetch(this.state.base + 'auth', {
-            method: "POST",
+        fetch("https://a51b-209-6-154-124.ngrok.io/auth", {
+            method: "GET",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/plain, */*",
             },
-            body: JSON.stringify(json_data)
         }).then(response =>
             response.json().then(data => {
                 if (data == true) {
-                    this.setState({viewLoginPage: false})
+                    this.fetchUsers()
                 }
             })
         ).catch(error => {
@@ -48,13 +66,35 @@ export default class App extends Component {
     }
 
     render() {
-        return (
+        return ( this.state.viewLoginPage ?
             <LoginPage 
                 onEmailChange={this.onEmailChange}
                 onPasswordChange={this.onPasswordChange}
                 onPress={this.onPress}
                 selected={this.selected}
-            />
+            /> :
+            <View style={styles.container}>
+                <Text style={styles.text}>
+                    Users Table
+                </Text>
+                <UsersView 
+                    data={{"tableHead": this.state.tableHead, "tableData": this.state.tableData}}
+                />
+            </View>
         );
     }
 };
+
+
+const styles = StyleSheet.create({
+    container: {
+        marginBottom: 20,
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    text: {
+        marginTop: 20,
+    }
+});

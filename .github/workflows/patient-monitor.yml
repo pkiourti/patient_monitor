@@ -4,9 +4,9 @@
 name: Patient Monitor Actions 
 on: 
   push:
-    branches: [ main, device_module, rest_api, chat_module, users_module ]
+    branches: [ main, device_module, rest_api, chat_module, users_module, react-native ]
   pull_request:
-    branches: [ main, device_module, rest_api, chat_module, users_module ]
+    branches: [ main, device_module, rest_api, chat_module, users_module, react-native ]
 jobs:
   build:
     runs-on: ubuntu-latest

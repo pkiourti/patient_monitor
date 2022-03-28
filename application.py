@@ -712,7 +712,17 @@ class PatientList(Resource):
         return {"patient_id": patient_id}
 
 class Authentication(Resource):
+    def get(self):
+        json_data = {}
+        json_data['email'] = "admin"
+        json_data['password'] = "admin"
+        json_data = json.dumps(json_data)
+
+        print(json_data)
+        return auth_module.authenticate(json_data)
+
     def post(self):
+        print(request)
         email = request.form['email']
         password = request.form['password']
 
@@ -721,6 +731,7 @@ class Authentication(Resource):
         json_data['password'] = password
         json_data = json.dumps(json_data)
 
+        print(json_data)
         return auth_module.authenticate(json_data)
 
 api.add_resource(DeviceList, '/devices')
