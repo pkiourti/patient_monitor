@@ -30,7 +30,6 @@ class Authentication:
         self._check_json(json_data)
         json_data = json.loads(json_data)
 
-
         email = json_data['email']
         password = json_data['password']
 

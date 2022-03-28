@@ -195,6 +195,7 @@ class User:
         array = list(users.values())
         users = {"head": [], "data": []}
         for user in array:
-            users["data"].append(list(user.values())[:-1]) 
-        users["head"] = ['First Name', 'Last Name', 'DOB', 'Address', 'State', 'Zip code', 'Phone Number', 'Email']
+            users["data"].append(list(user.values())[:-1])
+        users["head"] = ['First Name', 'Last Name', 'DOB', 'Address', 
+                        'State', 'Zip code', 'Phone Number', 'Email']
         return users
