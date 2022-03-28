@@ -10,7 +10,8 @@ $ flask run
 ```
 ## Screenshots of React Native App
 Screenshots of the login screen and the Users Table fetched by the backend:
-<img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/login-screen.png" width="100" height="100">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/login-screen.png" width="100" height="200">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/users-table-start.png" width="100" height="200">
 
 ## Screenshots of API
 Screenshots of GET requests can be found under the folder screenshots. Example:
