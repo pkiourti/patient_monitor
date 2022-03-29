@@ -538,14 +538,14 @@ class UserList(Resource):
         return users_module.get_users()
 
     def post(self):
-        first_name = request.form['first_name']
-        last_name = request.form['last_name']
-        date_of_birth = request.form['date_of_birth']
-        address = request.form['address']
-        state = request.form['state']
-        zipcode = request.form['zipcode']
-        phone_number = request.form['phone_number']
-        email = request.form['email']
+        first_name = request.json['first_name']
+        last_name = request.json['last_name']
+        date_of_birth = request.json['date_of_birth']
+        address = request.json['address']
+        state = request.json['state']
+        zipcode = request.json['zipcode']
+        phone_number = request.json['phone_number']
+        email = request.json['email']
         json_data = {}
         json_data['first_name'] = first_name
         json_data['last_name'] = last_name

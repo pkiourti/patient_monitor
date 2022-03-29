@@ -20,6 +20,8 @@ export default class App extends Component {
         this.onPhoneNumberChange = this.onPhoneNumberChange.bind(this)
         this.onViewRegisterUserPage = this.onViewRegisterUserPage.bind(this)
         this.onViewRegisterPatientPage = this.onViewRegisterPatientPage.bind(this)
+        this.onGoBack = this.onGoBack.bind(this)
+        this.onRegisterAUser = this.onRegisterAUser.bind(this)
         this.state = {
             viewLoginPage: true,
             viewTables: false,
@@ -38,7 +40,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        fetch("https://74e1-155-41-14-29.ngrok.io/users", {
+        fetch("https://dadb-209-6-154-124.ngrok.io/users", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -51,7 +53,7 @@ export default class App extends Component {
         ).catch(error => {
             console.log(error)
         });
-        fetch("https://74e1-155-41-14-29.ngrok.io/patients", {
+        fetch("https://dadb-209-6-154-124.ngrok.io/patients", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -76,7 +78,7 @@ export default class App extends Component {
 
     onPress() {
         json_data = {"email": this.state.email, "password": this.state.password}
-        fetch("https://74e1-155-41-14-29.ngrok.io/auth", {
+        fetch("https://dadb-209-6-154-124.ngrok.io/auth", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -108,37 +110,60 @@ export default class App extends Component {
     }
 
     onFirstNameChange(name) {
-        this.setState({user: {...this.state.user, "firstName": name}})
+        this.setState({user: { ...this.state.user, first_name: name}})
     }
 
     onLastNameChange(name) {
-        this.setState({user: {...this.state.user, "lastName": name}})
+        this.setState({user: { ...this.state.user, last_name: name}})
     }
 
     onDOBChange(name) {
-        this.setState({user: {...this.state.user, "dob": name}})
+        this.setState({user: { ...this.state.user, date_of_birth: name}})
     }
 
     onAddressChange(name) {
-        this.setState({user: {...this.state.user, "address": name}})
+        this.setState({user: { ...this.state.user, address: name}})
     }
 
     onStateChange(name) {
-        this.setState({user: {...this.state.user, "state": name}})
+        this.setState({user: { ...this.state.user, state: name}})
     }
 
     onZipcodeChange(name) {
-        this.setState({user: {...this.state.user, "zipcode": name}})
+        this.setState({user: { ...this.state.user, zipcode: name}})
     }
 
     onPhoneNumberChange(name) {
-        this.setState({user: {...this.state.user, "phoneNumber": name}})
+        this.setState({user: { ...this.state.user, phone_number: name}})
     }
 
     onUserEmailChange(name) {
-        this.setState({user: {...this.state.user, "email": name}})
+        this.setState({user: { ...this.state.user, email: name}})
     }
 
+    onGoBack() {
+        this.setState({viewTables: true, viewRegisterUserPage: false})
+    }
+
+    onRegisterAUser() {
+        fetch("https://dadb-209-6-154-124.ngrok.io/users", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json, text/plain, */*",
+            },
+            body: JSON.stringify({
+                ...this.state.user,
+            })
+        }).then(response =>
+            response.json().then(data => {
+                var values = Object.keys(this.state.user).map((key) => { return this.state.user[key]; });
+                this.setState({viewTables: true, viewRegisterUserPage: false, usersData: [ ...this.state.usersData, ...values ]})
+            })
+        ).catch(error => {
+            Alert.alert('Something went wrong')
+        });
+    }
 
     render() {
         let page;
@@ -147,7 +172,6 @@ export default class App extends Component {
                 onEmailChange={this.onEmailChange}
                 onPasswordChange={this.onPasswordChange}
                 onPress={this.onPress}
-                selected={this.selected}
             />
         } else if (this.state.viewTables) {
             page = <View style={styles.container}>
@@ -176,6 +200,20 @@ export default class App extends Component {
                     <Text style={styles.registerText}>Register a Patient</Text>
                 </TouchableOpacity>
             </View>
+            page = <table>
+                    <thead>
+                        <tr>
+                            <th><Text>Email</Text></th>
+                            <th><Text>Name</Text></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><Text>John Doe</Text></td>
+                            <td><Text>john@gmail.com</Text></td>
+                        </tr>
+                    </tbody>
+                   </table>
         } else if (this.state.viewRegisterUserPage) {
             page = <View>
                     <RegisterUser 
@@ -187,13 +225,11 @@ export default class App extends Component {
                         onZipcodeChange={this.onZipcodeChange}
                         onPhoneNumberChange={this.onPhoneNumberChange}
                         onUserEmailChange={this.onUserEmailChange}
+                        onRegisterAUser={this.onRegisterAUser}
+                        onGoBack={this.onGoBack}
+                        onRegisterAUser={this.onRegisterAUser}
+                        onGoBack={this.onGoBack}
                     />
-                    <TouchableOpacity
-                        style={styles.registerButton}
-                        onPress={() => this.setState({viewTables: true, viewRegisterUserPage: false})}
-                    >
-                        <Text style={styles.registerText}>Go back</Text>
-                    </TouchableOpacity>
                 </View>
         } else if (this.state.viewRegisterPatientPage) {
             page = <View>
