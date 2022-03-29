@@ -1,11 +1,14 @@
 # Use code from https://tinyurl.com/mvj637j6
 # to check if a string is hexadecimal
 
-import time
+from pymongo import MongoClient
+import pymongo
+import datetime
 import logging
 import json
 import os
 from itertools import compress
+from bson.objectid import ObjectId
 
 users_db_file = os.path.join('db', 'users.json')
 
@@ -17,6 +20,8 @@ class User:
         logging.basicConfig()
         self.logger = logging.getLogger('User Logger')
         self.logger.setLevel(logging.DEBUG)
+        client = MongoClient('localhost', 27017)
+        self.db = client.patientMonitorDB
 
     def _check_user_id(self, user_id):
         with open(users_db_file, 'r') as f:
@@ -79,12 +84,9 @@ class User:
         zipcode = json_data['zipcode']
         phone_number = json_data['phone_number']
         email = json_data['email']
-        created_at = time.time()
+        created_at = datetime.strptime(from_date, '%Y-%m-%d')
 
-        new_user_id = self._create_user_id()
-        with open(users_db_file, 'r') as f:
-            users = json.load(f)
-        users[str(new_user_id)] = {
+        user = {
             "first_name": first_name,
             "last_name": last_name,
             "date_of_birth": date_of_birth,
@@ -95,11 +97,10 @@ class User:
             "email": email,
             "created_at": created_at
         }
-        with open(users_db_file, 'w') as f:
-            data = json.dumps(users)
-            f.write(data)
-        self.logger.info('Created user with user id %s',str(new_user_id))
-        return str(new_user_id)
+        response = self.db.users.insert(user)
+        if response.acknowledged:
+            self.logger.info('Created user with user id %s',str(new_user_id))
+            return str(response._id)
 
     def get_user(self, json_data):
         self._check_json(json_data)
@@ -114,9 +115,8 @@ class User:
 
         user_id = json_data['user_id']
         self._check_user_id(user_id)
-        with open(users_db_file, 'r') as f:
-            users = json.load(f)
-        return users[user_id]
+        user = self.db.users.findOne({_id: ObjectId(user_id)})
+        return user
 
     def delete_user(self, json_data):
         self._check_json(json_data)
@@ -131,15 +131,15 @@ class User:
 
         user_id = json_data['user_id']
         self._check_user_id(user_id)
-        with open(users_db_file, 'r') as f:
-            users = json.load(f)
-        self.logger.info('Deleting user with user id %s',str(user_id))
-        del users[user_id]
-        with open(users_db_file, 'w') as f:
-            data = json.dumps(users)
-            f.write(data)
-        self.logger.info('Deleted user with user id %s',str(user_id))
-        return user_id
+        response = self.db.users.deleteOne({_id: ObjectId(user_id)})
+        if response.acknowledged and response.deletedCount == 1:
+            self.logger.info('Deleted user with user id %s',str(user_id))
+            return user_id
+        else:
+            self.logger.error('User id ' \
+                        + user_id + ' was not deleted')
+            raise ValueError(50, 'User id ' \
+                        + user_id + ' was not deleted')
         
     def update_user(self, json_data):
         self._check_json(json_data)
@@ -205,3 +205,19 @@ class User:
         users["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
                         'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
         return users
+
+    def get_users(self):
+        users = self.db.users.find()
+        response = {"data": [], "head": []}
+        for user in users:
+            user["date_of_birth"] = user["date_of_birth"].strftime('%d %b %Y')
+            user["created_at"] = user["created_at"].strftime('%H:%M:%S %d %b %Y')
+            if "updated_at" in user:
+                user["updated_at"] = user["updated_at"].strftime('%H:%M:%S %d %b %Y')
+            else:
+                user["updated_at"] = "-"
+            del user['_id']
+            response["data"].append(list(user.values()))
+        response["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
+                        'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
+        return response
