@@ -40,7 +40,7 @@ export default class App extends Component {
     }
 
     componentDidMount() {
-        fetch("https://dadb-209-6-154-124.ngrok.io/users", {
+        fetch("https://1b66-155-41-33-242.ngrok.io/users", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -49,11 +49,13 @@ export default class App extends Component {
         }).then(response =>
             response.json().then(data => {
                 this.setState({usersHead: data["head"], usersData: data["data"]})
+            }).catch(error => {
+                console.log(error)
             })
         ).catch(error => {
             console.log(error)
         });
-        fetch("https://dadb-209-6-154-124.ngrok.io/patients", {
+        fetch("https://1b66-155-41-33-242.ngrok.io/patients", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -78,7 +80,7 @@ export default class App extends Component {
 
     onPress() {
         json_data = {"email": this.state.email, "password": this.state.password}
-        fetch("https://dadb-209-6-154-124.ngrok.io/auth", {
+        fetch("https://1b66-155-41-33-242.ngrok.io/auth", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -146,7 +148,7 @@ export default class App extends Component {
     }
 
     onRegisterAUser() {
-        fetch("https://dadb-209-6-154-124.ngrok.io/users", {
+        fetch("https://1b66-155-41-33-242.ngrok.io/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -200,20 +202,6 @@ export default class App extends Component {
                     <Text style={styles.registerText}>Register a Patient</Text>
                 </TouchableOpacity>
             </View>
-            page = <table>
-                    <thead>
-                        <tr>
-                            <th><Text>Email</Text></th>
-                            <th><Text>Name</Text></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><Text>John Doe</Text></td>
-                            <td><Text>john@gmail.com</Text></td>
-                        </tr>
-                    </tbody>
-                   </table>
         } else if (this.state.viewRegisterUserPage) {
             page = <View>
                     <RegisterUser 
