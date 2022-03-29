@@ -195,7 +195,13 @@ class User:
         array = list(users.values())
         users = {"head": [], "data": []}
         for user in array:
-            users["data"].append(list(user.values())[:-1])
+            user["created_at"] = time.ctime(user["created_at"])
+            if "updated_at" in user:
+                user["updated_at"] = time.ctime(user["updated_at"])
+            else:
+                user["updated_at"] = "-"
+                
+            users["data"].append(list(user.values()))
         users["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
-                        'State', 'Zip code', 'Phone Number', 'Email']
+                        'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
         return users

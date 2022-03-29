@@ -205,4 +205,24 @@ class Patient:
     def get_patients(self):
         with open(patients_db_file, 'r') as f:
             patients = json.load(f)
+        with open(users_db_file, 'r') as f:
+            users = json.load(f)
+        users = list(users.values())
+        array = list(patients.values())
+        patients = {"head": [], "data": []}
+        for patient in array:
+            user = users[int(patient["user_id"])]
+            if "created_at" in user:
+                del user['created_at']
+            if "updated_at" in user:
+                del user['updated_at']
+            patient['created_at'] = time.ctime(patient['created_at'])
+            if 'updated_at' in patient:
+                patient['updated_at'] = time.ctime(patient['updated_at'])
+            else:
+                patient['updated_at'] = '-'
+            patients["data"].append(list(user.values()) + list(patient.values())[1:])
+        patients["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
+                        'State', 'Zip code', 'Phone Number', 'Email', 
+                        'Emergency Contact Id', 'Patient History', 'Created', 'Updated']
         return patients
