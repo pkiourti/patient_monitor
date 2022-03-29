@@ -13,7 +13,6 @@ class Authentication:
 
     def _check_json(self, data):
         self.logger.info('Parsing sent data')
-        print(data)
         try:
             json.loads(data)
         except:
@@ -25,7 +24,7 @@ class Authentication:
                              + str(type(data)))
 
     def authenticate(self, json_data):
-        self.logger.info('Creating a new device')
+        self.logger.info('Authenticating user')
 
         self._check_json(json_data)
         json_data = json.loads(json_data)

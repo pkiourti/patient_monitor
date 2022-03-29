@@ -23,7 +23,7 @@ const UsersView = (props) => {
 const styles = StyleSheet.create({
     container: { flex: 1, padding: 16, paddingTop: 30, backgroundColor: '#fff' },
     head: { height: 40, backgroundColor: '#f1f8ff' },
-    text: { minWidth: 100, margin: 6, textAlign: 'center' }
+    text: { minWidth: 200, margin: 6, textAlign: 'center' }
 });
 
 export default UsersView;
