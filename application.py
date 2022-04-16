@@ -697,6 +697,7 @@ class PatientList(Resource):
         return patient_module.get_patients()
 
     def post(self):
+        print('POST patients', request.json)
         emergency_contact_id = request.json['emergency_contact_id']
         user_id = request.json['user_id']
         patient_history = request.json['patient_history']

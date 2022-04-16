@@ -1,9 +1,7 @@
-# Use code from https://tinyurl.com/mvj637j6
-# to check if a string is hexadecimal
-
 from pymongo import MongoClient
 import pymongo
-import datetime
+import time
+from datetime import datetime
 import logging
 import json
 import os
@@ -78,13 +76,13 @@ class User:
 
         first_name = json_data['first_name']
         last_name = json_data['last_name']
-        date_of_birth = json_data['date_of_birth']
+        date_of_birth = datetime.strptime(json_data['date_of_birth'], "%b %d, %Y")
         address = json_data['address']
         state = json_data['state']
         zipcode = json_data['zipcode']
         phone_number = json_data['phone_number']
         email = json_data['email']
-        created_at = datetime.strptime(from_date, '%Y-%m-%d')
+        created_at = datetime.utcnow()#datetime.strptime(str(time.time()), '%Y-%m-%d')
 
         user = {
             "first_name": first_name,
@@ -97,10 +95,12 @@ class User:
             "email": email,
             "created_at": created_at
         }
-        response = self.db.users.insert(user)
+        response = self.db.users.insert_one(user)
+        print(response)
         if response.acknowledged:
-            self.logger.info('Created user with user id %s',str(new_user_id))
-            return str(response._id)
+            self.logger.info('Created user with user id %s',str(response.inserted_id))
+            print(response.inserted_id)
+            return str(response.inserted_id)
 
     def get_user(self, json_data):
         self._check_json(json_data)
@@ -114,7 +114,7 @@ class User:
             raise ValueError(11, "Missing required data %s", missing_data)
 
         user_id = json_data['user_id']
-        self._check_user_id(user_id)
+        #self._check_user_id(user_id)
         user = self.db.users.findOne({_id: ObjectId(user_id)})
         return user
 
@@ -130,7 +130,7 @@ class User:
             raise ValueError(11, "Missing required data %s", missing_data)
 
         user_id = json_data['user_id']
-        self._check_user_id(user_id)
+        #self._check_user_id(user_id)
         response = self.db.users.deleteOne({_id: ObjectId(user_id)})
         if response.acknowledged and response.deletedCount == 1:
             self.logger.info('Deleted user with user id %s',str(user_id))
@@ -165,7 +165,7 @@ class User:
         email = json_data['email']
         updated_at = time.time()
 
-        self._check_user_id(user_id)
+        #self._check_user_id(user_id)
 
         self.logger.info('Updating user %s', user_id)
         with open(users_db_file, 'r') as f:
@@ -190,25 +190,8 @@ class User:
         return user_id
         
     def get_users(self):
-        with open(users_db_file, 'r') as f:
-            users = json.load(f)
-        array = list(users.values())
-        users = {"head": [], "data": []}
-        for user in array:
-            user["created_at"] = time.ctime(user["created_at"])
-            if "updated_at" in user:
-                user["updated_at"] = time.ctime(user["updated_at"])
-            else:
-                user["updated_at"] = "-"
-                
-            users["data"].append(list(user.values()))
-        users["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
-                        'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
-        return users
-
-    def get_users(self):
+        response = []
         users = self.db.users.find()
-        response = {"data": [], "head": []}
         for user in users:
             user["date_of_birth"] = user["date_of_birth"].strftime('%d %b %Y')
             user["created_at"] = user["created_at"].strftime('%H:%M:%S %d %b %Y')
@@ -216,8 +199,24 @@ class User:
                 user["updated_at"] = user["updated_at"].strftime('%H:%M:%S %d %b %Y')
             else:
                 user["updated_at"] = "-"
-            del user['_id']
-            response["data"].append(list(user.values()))
-        response["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
-                        'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
+            print(user)
+            user["_id"] = str(user["_id"])
+            response.append(user)
         return response
+
+   # def get_users(self):
+   #     print(self.db)
+   #     print(self.db.users)
+   #     users = self.db.users.find()
+   #     response = {"data": [], "head": []}
+   #     for user in users:
+   #         user["date_of_birth"] = user["date_of_birth"].strftime('%d %b %Y')
+   #         user["created_at"] = user["created_at"].strftime('%H:%M:%S %d %b %Y')
+   #         if "updated_at" in user:
+   #             user["updated_at"] = user["updated_at"].strftime('%H:%M:%S %d %b %Y')
+   #         else:
+   #             user["updated_at"] = "-"
+   #         response["data"].append(list(user.values()))
+   #     response["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
+   #                     'State', 'Zip code', 'Phone Number', 'Email', 'Created', 'Updated']
+   #     return response

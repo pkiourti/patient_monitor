@@ -6,6 +6,9 @@ import logging
 import json
 import os
 from itertools import compress
+from bson.objectid import ObjectId
+import pymongo
+from pymongo import MongoClient
 
 patients_db_file = os.path.join('db', 'patients.json')
 users_db_file = os.path.join('db', 'users.json')
@@ -106,8 +109,8 @@ class Patient:
         patient_history = json_data['patient_history']
         created_at = time.time()
 
-        self._check_emergency_contact_id(emergency_contact_id)
-        self._check_user_id(user_id)
+        #self._check_emergency_contact_id(emergency_contact_id)
+        #self._check_user_id(user_id)
 
         new_patient_id = self._create_patient_id()
         with open(patients_db_file, 'r') as f:
@@ -181,8 +184,8 @@ class Patient:
         user_id = json_data['user_id']
         patient_history = json_data['patient_history']
 
-        self._check_user_id(emergency_contact_id)
-        self._check_user_id(user_id)
+        #self._check_user_id(emergency_contact_id)
+        #self._check_user_id(user_id)
         self._check_patient_id(patient_id)
 
         self.logger.info('Updating patient %s', patient_id)
@@ -205,17 +208,22 @@ class Patient:
     def get_patients(self):
         with open(patients_db_file, 'r') as f:
             patients = json.load(f)
-        with open(users_db_file, 'r') as f:
-            users = json.load(f)
-        users = list(users.values())
+        
+        client = MongoClient('localhost', 27017)
+        db = client.patientMonitorDB
         array = list(patients.values())
         patients = {"head": [], "data": []}
+        arr = []
         for patient in array:
-            user = users[int(patient["user_id"])]
+            print(patient)
+            user = db.users.find_one({"_id": ObjectId(patient["user_id"])})
+            print(user)
             if "created_at" in user:
                 del user['created_at']
             if "updated_at" in user:
                 del user['updated_at']
+            del user["_id"]
+            user["date_of_birth"] = user["date_of_birth"].strftime('%d %b %Y')
             patient['created_at'] = time.ctime(patient['created_at'])
             if 'updated_at' in patient:
                 patient['updated_at'] = time.ctime(patient['updated_at'])
@@ -225,4 +233,5 @@ class Patient:
         patients["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
                         'State', 'Zip code', 'Phone Number', 'Email', 
                         'Emergency Contact Id', 'Patient History', 'Created', 'Updated']
+        print(patients)
         return patients
