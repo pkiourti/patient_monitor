@@ -1,6 +1,27 @@
 # Project 2 - Patient Monitor Platform
 ### NOTE: Project 4 exists in a different repository - please check here: https://github.com/pkiourti/queue-system
 ## Setup
+### Install MongoDB on Ubuntu
+This project has been tested and implemented in Ubuntu 20.04 LTS. I used MongoDB and installed from here: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/ using the following commands:
+```
+$ wget -qO - https://www.mongodb.org/static/pgp/server-5.0.asc | sudo apt-key add -
+$ sudo touch /etc/apt/sources.list.d/mongodb-org-5.0.list
+$ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/5.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-5.0.list
+$ sudo apt-get update
+$ sudo apt-get install -y mongodb-org
+```
+### Install Expo and dependencies for React Native on Ubuntu
+```
+$ npm install -g expo-cli
+$ cd ~/ec530/project2/patient_monitor/PatientMonitorApp 
+$ npm install
+```
+
+### Start MongoDB
+```
+$ sudo systemctl start mongod
+```
+### Start the Flask server
 In order to run the tests or use any part of this code from its home directory you need to set the FLASK environment variable as follows:
 ```
 $ pwd
@@ -8,6 +29,20 @@ $ pwd
 $ export FLASK_APP="application.py"
 $ flask run
 ```
+
+### Install and start ngrok
+I used ngrok to access the Flask server that runs locally on port 5000 (started in the previous step). I couldn't access the deployed AWS Flask server or even the one running localhost without ngrok. ngrok is a simple solution to expose a local server to the Internet. Download tar file from here: https://ngrok.com/download:
+```
+$ sudo tar xvzf ~/Downloads/ngrok-stable-linux-amd64.tgz -C /usr/local/bin
+$ cd ~/Downloads/ngrok-stable-linux-amd64
+$ ./ngrok http 5000
+```
+
+### Start the React Native App (Android)
+```
+$ expo start
+```
+
 ## Screenshots of React Native App
 Screenshots of the login screen and the Users Table fetched by the backend:
 - <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/login-screen.png" width="250" height="400">
