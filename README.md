@@ -1,6 +1,13 @@
 # Project 2 - Patient Monitor Platform
 ### NOTE: Project 4 exists in a different repository - please check here: https://github.com/pkiourti/queue-system
 ## Setup
+### Install dependencies from requirements.txt
+```
+conda create -n project2 python
+conda activate project2
+conda install --file requirements.txt 
+```
+
 ### Install MongoDB on Ubuntu
 This project has been tested and implemented in Ubuntu 20.04 LTS. I used MongoDB and installed from here: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/ using the following commands:
 ```
@@ -37,6 +44,9 @@ $ sudo tar xvzf ~/Downloads/ngrok-stable-linux-amd64.tgz -C /usr/local/bin
 $ cd ~/Downloads/ngrok-stable-linux-amd64
 $ ./ngrok http 5000
 ```
+Change line 31 of the App.js from 
+`base_url: "https://b5d8-24-63-24-208.ngrok.io",` to the https url that ngrok outputs.
+
 
 ### Start the React Native App (Android)
 ```
