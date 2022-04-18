@@ -36,7 +36,7 @@ jobs:
         pytest
     - name: Run Coverage
       run: |
-        export FLASK_APP="application.py" 
+        export FLASK_APP="application.py"
         flask run &
         coverage run -m pytest
         coverage report
