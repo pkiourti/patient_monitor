@@ -7,7 +7,7 @@ def test_auth_api():
     json_data = {}
     json_data['email'] = "admin"
     json_data['password'] = "admin"
-    response = requests.post(BASE + 'auth', data=json_data)
+    response = requests.post(BASE + 'auth', json=json_data)
     print(response.json())
     assert response.status_code == 200
     assert response.json()

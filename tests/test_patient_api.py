@@ -38,7 +38,7 @@ def test_patient_api():
     assert response.json() == patient_id
     print(response.json())
 
-    # test get request
-    response = requests.get(BASE + 'patients')
-    assert response.status_code == 200
-    print(response)
+#   # test get request
+#   response = requests.get(BASE + 'patients')
+#   assert response.status_code == 200
+#   print(response)

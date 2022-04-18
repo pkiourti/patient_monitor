@@ -28,6 +28,7 @@ export default class App extends Component {
         this.onRegisterAUser = this.onRegisterAUser.bind(this)
         this.onRegisterAPatient = this.onRegisterAPatient.bind(this)
         this.state = {
+            base_url: "https://b5d8-24-63-24-208.ngrok.io",
             viewLoginPage: true,
             viewTables: false,
             viewRegisterUserPage: false,
@@ -45,7 +46,7 @@ export default class App extends Component {
     }
 
     getUsers() {
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/users", {
+        fetch(this.state.base_url + "/users", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -65,7 +66,7 @@ export default class App extends Component {
     }
 
     getPatients() {
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/patients", {
+        fetch(this.state.base_url + "/patients", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -95,7 +96,7 @@ export default class App extends Component {
 
     onPress() {
         json_data = {"email": this.state.email, "password": this.state.password}
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/auth", {
+        fetch(this.state.base_url + "/auth", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -203,7 +204,7 @@ export default class App extends Component {
     }
 
     onRegisterAUser() {
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/users", {
+        fetch(this.state.base_url + "/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -225,7 +226,7 @@ export default class App extends Component {
     }
 
     onRegisterAPatient() {
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/users", {
+        fetch(this.state.base_url + "/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -236,7 +237,7 @@ export default class App extends Component {
             })
         }).then(response =>
             response.json().then(data => {
-                fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/patients", {
+                fetch(this.state.base_url + "/patients", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -267,7 +268,7 @@ export default class App extends Component {
     }
 
     onRegisterAUser() {
-        fetch("https://dfd6-2601-19b-a00-1760-d3ad-52b8-2c14-6ea0.ngrok.io/users", {
+        fetch(this.state.base_url + "/users", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

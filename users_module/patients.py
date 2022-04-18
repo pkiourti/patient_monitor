@@ -213,9 +213,7 @@ class Patient:
         array = list(patients.values())
         patients = {"head": [], "data": []}
         for patient in array:
-            print(patient)
             user = db.users.find_one({"_id": ObjectId(patient["user_id"])})
-            print(user)
             if "created_at" in user:
                 del user['created_at']
             if "updated_at" in user:
@@ -231,5 +229,4 @@ class Patient:
         patients["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
                         'State', 'Zip code', 'Phone Number', 'Email',
                         'Emergency Contact Id', 'Patient History', 'Created', 'Updated']
-        print(patients)
         return patients
