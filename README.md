@@ -103,6 +103,15 @@ The code currently supports:
 10) GET all chat sessions, POST a new chat session: **{url}/sessions**
 11) GET, PUT, DELETE a chat message: **{url}/messages/{message_id}**
 12) GET all chat messages, POST a new chat message: **{url}/messages**
+13) GET, PUT, DELETE a user: **{url}/user/{user_id}**
+14) GET all users, POST a new user: **{url}/users**
+15) GET, PUT, DELETE a patient: **{url}/patients/{patient_id}**
+16) GET all users, POST a new patient: **{url}/patients**
+17) GET, PUT, DELETE a user role: **{url}/user_roles/{user_role_id}**
+18) GET all users, POST a new user role: **{url}/user_roles**
+19) GET, PUT, DELETE a user role assignment: **{url}/user_role_assignments/{role_assignment_id}**
+20) GET all users, POST a new user role assignment: **{url}/user_role_assignments**
+21) POST username and password for authentication: **{url}/auth**
 
 Since there is no database at the moment, the recorded data are saved and updated to JSON files under the folder db/. The Device Module code can be found under device_module/. The chat_module can be found under chat_module/
 
