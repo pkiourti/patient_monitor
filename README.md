@@ -56,10 +56,17 @@ $ expo start
 ## Screenshots of React Native App
 Screenshots of the login screen and the Users Table fetched by the backend:
 - <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/login-screen.png" width="250" height="400">
-- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/users-table-start.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/login-screen-data.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/users-view-1.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/users-view-2.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/register-user.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/register-user-data.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/users-view-after-registration.png" width="250" height="400">
+- <img src="https://github.com/pkiourti/patient_monitor/blob/main/screenshots/register-patient.png" width="250" height="400">
+
 
 ## Screenshots of API
-Screenshots of GET requests can be found under the folder screenshots. Example:
+Screenshots of GET requests can be found under the folder ![screenshots](https://github.com/pkiourti/patient_monitor/blob/main/screenshots). Example:
 ![Screenshot of GET devices request](https://github.com/pkiourti/patient_monitor/blob/main/screenshots/get-device.png)
 
 ## Design of Chat Module
@@ -96,6 +103,15 @@ The code currently supports:
 10) GET all chat sessions, POST a new chat session: **{url}/sessions**
 11) GET, PUT, DELETE a chat message: **{url}/messages/{message_id}**
 12) GET all chat messages, POST a new chat message: **{url}/messages**
+13) GET, PUT, DELETE a user: **{url}/user/{user_id}**
+14) GET all users, POST a new user: **{url}/users**
+15) GET, PUT, DELETE a patient: **{url}/patients/{patient_id}**
+16) GET all users, POST a new patient: **{url}/patients**
+17) GET, PUT, DELETE a user role: **{url}/user_roles/{user_role_id}**
+18) GET all users, POST a new user role: **{url}/user_roles**
+19) GET, PUT, DELETE a user role assignment: **{url}/user_role_assignments/{role_assignment_id}**
+20) GET all users, POST a new user role assignment: **{url}/user_role_assignments**
+21) POST username and password for authentication: **{url}/auth**
 
 Since there is no database at the moment, the recorded data are saved and updated to JSON files under the folder db/. The Device Module code can be found under device_module/. The chat_module can be found under chat_module/
 
