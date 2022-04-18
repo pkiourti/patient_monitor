@@ -17,7 +17,7 @@ $ echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongo
 $ sudo apt-get update
 $ sudo apt-get install -y mongodb-org
 ```
-**NOTE**: MongoDB files are not uploaded in the repository because there are large binary files. So, I only replaced the users module to use MongoDB (even though it would be similar for patients, user_roles, messages, sessions, devices, device_assignments, device_measurements, device_types, etc.) adn removes one test from patients and the users api tests since mongodb is not running in the github workflow.
+**NOTE**: MongoDB files are not uploaded in the repository because they are large binary files. So, I only replaced the users module to use MongoDB (even though it would be similar for patients, user_roles, messages, sessions, devices, device_assignments, device_measurements, device_types, etc.) adn removes one test from patients and the users api tests since mongodb is not running in the github workflow.
 
 ### Install Expo and dependencies for React Native on Ubuntu
 ```
