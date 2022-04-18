@@ -1,5 +1,4 @@
 from pymongo import MongoClient
-import pymongo
 import time
 from datetime import datetime
 import logging
@@ -115,7 +114,7 @@ class User:
 
         user_id = json_data['user_id']
         #self._check_user_id(user_id)
-        user = self.db.users.findOne({_id: ObjectId(user_id)})
+        user = self.db.users.findOne({'_id': ObjectId(user_id)})
         return user
 
     def delete_user(self, json_data):
@@ -131,7 +130,7 @@ class User:
 
         user_id = json_data['user_id']
         #self._check_user_id(user_id)
-        response = self.db.users.deleteOne({_id: ObjectId(user_id)})
+        response = self.db.users.deleteOne({'_id': ObjectId(user_id)})
         if response.acknowledged and response.deletedCount == 1:
             self.logger.info('Deleted user with user id %s',str(user_id))
             return user_id

@@ -7,7 +7,6 @@ import json
 import os
 from itertools import compress
 from bson.objectid import ObjectId
-import pymongo
 from pymongo import MongoClient
 
 patients_db_file = os.path.join('db', 'patients.json')
@@ -213,7 +212,6 @@ class Patient:
         db = client.patientMonitorDB
         array = list(patients.values())
         patients = {"head": [], "data": []}
-        arr = []
         for patient in array:
             print(patient)
             user = db.users.find_one({"_id": ObjectId(patient["user_id"])})
@@ -231,7 +229,7 @@ class Patient:
                 patient['updated_at'] = '-'
             patients["data"].append(list(user.values()) + list(patient.values())[1:])
         patients["head"] = ['First Name', 'Last Name', 'DOB', 'Address',
-                        'State', 'Zip code', 'Phone Number', 'Email', 
+                        'State', 'Zip code', 'Phone Number', 'Email',
                         'Emergency Contact Id', 'Patient History', 'Created', 'Updated']
         print(patients)
         return patients
