@@ -66,7 +66,7 @@ Screenshots of the login screen and the Users Table fetched by the backend:
 
 
 ## Screenshots of API
-Screenshots of GET requests can be found under the folder screenshots. Example:
+Screenshots of GET requests can be found under the folder ![screenshots](https://github.com/pkiourti/patient_monitor/blob/main/screenshots). Example:
 ![Screenshot of GET devices request](https://github.com/pkiourti/patient_monitor/blob/main/screenshots/get-device.png)
 
 ## Design of Chat Module
