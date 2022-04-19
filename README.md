@@ -46,7 +46,7 @@ $ sudo tar xvzf ~/Downloads/ngrok-stable-linux-amd64.tgz -C /usr/local/bin
 $ cd ~/Downloads/ngrok-stable-linux-amd64
 $ ./ngrok http 5000
 ```
-Change line 31 of the App.js from 
+Change line 31 of the PatientMonitorApp/App.js from 
 `base_url: "https://b5d8-24-63-24-208.ngrok.io",` to the https url that ngrok outputs.
 
 
